@@ -12,18 +12,6 @@ PSRs you support to avoid any confusion with users and contributors.
 
 https://github.com/tightenco/collect/archive/v5.5.16.zip
 
-## Structure
-
-If any of the following are applicable to your project, then the directory structure should follow industry best practises by being named the following.
-
-```
-bin/        
-config/
-src/
-tests/
-vendor/
-```
-
 ## Install
 
 Via Composer
@@ -35,8 +23,15 @@ $ composer require pragmarx/coollection
 ## Usage
 
 ``` php
-$skeleton = new pragmarx\coollection();
-echo $skeleton->echoPhrase('Hello, League!');
+$collection = coollection(['first_name' => 'Barak Obama']);
+
+echo $collection->first_name;
+
+// Barak Obama
+
+echo $collection->flip()->barak_obama == 'first_name';
+
+// true
 ```
 
 ## Change log

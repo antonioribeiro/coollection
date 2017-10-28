@@ -9,6 +9,7 @@ shopt -s dotglob
  # Define all variables
  #
 collectVersion=5.5.16
+homeDir=.
 baseDir=src/package/Support/Tightenco
 oldNamespace='Illuminate\\'
 newNamespace='Tightenco\\Collect\\'
@@ -29,13 +30,17 @@ function main()
 
     # displayVariables
 
-    cleanDir
+    createDir
 
     download
 
     extract
 
     renameNamespace
+
+    copyTests
+
+    cleanupDir
 }
 
 ##
@@ -58,7 +63,7 @@ function displayVariables()
 ##
  # Clean the destination directory
  #
-function cleanDir()
+function createDir()
 {
     if [ -d ${baseDir} ]; then
         echo "Cleaning ${baseDir}"
@@ -98,6 +103,28 @@ function extract()
 }
 
 ##
+ # Clenup Tightenco/Collect
+ #
+function cleanupDir()
+{
+    echo "Cleaning up Tightenco..."
+
+    rm -rf ${collectDir}/tests
+    rm ${collectDir}/phpunit.xml
+}
+
+
+##
+ # Copy tests to our tests dir
+ #
+function copyTests()
+{
+    echo "Copying tests..."
+
+    cp ${collectDir}/tests/Support/SupportCollectionTest.php ${homeDir}/tests/
+}
+
+##
  # Rename namespace on all files
  #
 function renameNamespace()
@@ -110,7 +137,7 @@ function renameNamespace()
 
     rmdir ${illuminateNamespaceDir}
 
-    find ${srcDir} -name "*.php" -exec sed -i "" -e "s|${oldNamespace}|${newNamespace}|g" {} \;
+    find ${baseDir} -name "*.php" -exec sed -i "" -e "s|${oldNamespace}|${newNamespace}|g" {} \;
 }
 
 ##
