@@ -3,18 +3,22 @@
 namespace PragmaRX\Coollection\Package;
 
 use Exception;
-use Illuminate\Support\Arr;
-use Illuminate\Support\HigherOrderCollectionProxy;
+use Traversable;
 use JsonSerializable;
+use Illuminate\Support\HigherOrderCollectionProxy;
 use Tightenco\Collect\Contracts\Support\Arrayable;
 use Tightenco\Collect\Contracts\Support\Jsonable;
 use Tightenco\Collect\Support\Collection as TightencoCollection;
-use Traversable;
 
 class Coollection extends TightencoCollection
 {
     const NOT_FOUND = '!__NOT__FOUND__!';
 
+    /**
+     * Raise exception on null.
+     *
+     * @static boolean
+     */
     static $raiseExceptionOnNull = true;
 
     /**
@@ -41,6 +45,12 @@ class Coollection extends TightencoCollection
         return $this->wrapIfArrayable(parent::get($key, $default));
     }
 
+    /**
+     * Get an array as a key.
+     *
+     * @param $key
+     * @return mixed|string
+     */
     private function getArrayKey($key)
     {
         if (array_key_exists($key, $this->items)) {
@@ -56,6 +66,12 @@ class Coollection extends TightencoCollection
             : $value;
     }
 
+    /**
+     * Get a property by name.
+     *
+     * @param $key
+     * @return string|static
+     */
     private function getByPropertyName($key)
     {
         if (($key = $this->getArrayKey($key)) !== static::NOT_FOUND) {
@@ -70,6 +86,8 @@ class Coollection extends TightencoCollection
     }
 
     /**
+     * Should it raise exception when the property is null?
+     *
      * @return bool
      */
     public static function shouldRaiseExceptionOnNull()
@@ -100,6 +118,8 @@ class Coollection extends TightencoCollection
     }
 
     /**
+     * Raise exception on null setter.
+     *
      * @param bool $raiseExceptionOnNull
      */
     public static function setRaiseExceptionOnNull(bool $raiseExceptionOnNull)
@@ -144,64 +164,6 @@ class Coollection extends TightencoCollection
         }
 
         return new HigherOrderCollectionProxy($this, $key);
-    }
-
-    /**
-     * @param string $key
-     * @param mixed $operator
-     * @param null $value
-     * @return static
-     */
-    public function where($key, $operator, $value = null)
-    {
-        if (func_num_args() == 2) {
-            $value = $operator;
-
-            $operator = '=';
-        }
-
-        if (method_exists($this, $method = 'where'.ucfirst($key))) {
-            return $this->{$method}($value);
-        }
-
-        return $this->wrap(parent::where($key, $operator, $value));
-    }
-
-    public function whereLanguage($value)
-    {
-        return $this->_whereAttribute('languages', $value);
-    }
-
-    public function whereISO639_3($value)
-    {
-        return $this->_whereKey('languages', $value);
-    }
-
-    public function whereISO4217($value)
-    {
-        return $this->_whereAttribute('currency', $value);
-    }
-
-    private function _whereAttribute(string $arrayName, $value)
-    {
-        return $this->filter(function ($data) use ($value, $arrayName) {
-            if (isset($data->{$arrayName})) {
-                return in_array($value, (array) $data->{$arrayName});
-            }
-
-            return false;
-        });
-    }
-
-    private function _whereKey(string $arrayName, $value)
-    {
-        return $this->filter(function ($data) use ($value, $arrayName) {
-            if (isset($data->{$arrayName})) {
-                return Arr::has($data->{$arrayName}, $value);
-            }
-
-            return false;
-        });
     }
 
     /**

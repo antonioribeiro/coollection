@@ -1,4 +1,5 @@
 # Coollection
+### Objectified Collection
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
@@ -7,10 +8,48 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what
-PSRs you support to avoid any confusion with users and contributors.
+Access your collection items as properties:
 
-https://github.com/tightenco/collect/archive/v5.5.16.zip
+``` php
+$collection->name
+
+$collection->addresses->first()->street_name
+
+$collection->flatten()->cars->reject(function($car) { return $car->name == 'ferrari' })->last()->model
+```
+## Why?
+
+Answering with a question: which one is easier to look at?
+
+``` php
+collect(
+    collect(
+        collect(
+            collect(
+                $collection['cars']
+            )->unique('constructor')['models']
+        )->last()['model']
+    )['colors']
+)->first()['rgb']
+```
+
+or
+
+``` php
+$collection->cars->unique('constructor')->last()->model->colors->first()->rgb
+```
+
+## PHP Agnostic
+
+This is an agnostic PHP package, which uses an extracted version of Laravel's Illuminate Collection, it's actually [tightenco/collect](https://github.com/tightenco/collect), modified to support object properties.
+
+## Documentation
+
+It's Laravel's Collection, you can check [its docs](https://laravel.com/docs/5.5/collections). The only difference is that you can access array keys as properties, like any other object.
+
+## Changes to [tightenco/collect](https://github.com/tightenco/collect)
+
+As it is still using [Illuminate's namespace](https://github.com/tightenco/collect/pull/56), which may conflict with **Illuminate\Support\Collection**, for those who may need it in a Laravel project, this package has an [updater script](upgrade-collect.sh) which downloads tightenco/collect sources and change the namespace to [**Tightenco\Collect**](https://github.com/antonioribeiro/coolection/blob/master/src/package/Support/Tightenco/Collect/src/Tightenco/Collect/Support/Collection.php).  
 
 ## Install
 
@@ -22,14 +61,25 @@ $ composer require pragmarx/coollection
 
 ## Usage
 
-``` php
-$collection = coollection(['first_name' => 'Barak Obama']);
+Instantiate, the class directly or using the helper:
 
-echo $collection->first_name;
+``` php
+$c = new Coollection(['first_name' => 'Barak Obama']);
+
+$c = coollect(['first_name' => 'Barak Obama']);
+``` 
+
+Then you use it as an object:
+
+``` php
+echo $c->first_name;
 
 // Barak Obama
 
-echo $collection->flip()->barak_obama == 'first_name';
+
+echo $c->flip()->barak_obama == 'first_name' 
+    ? 'true' 
+    : 'false';
 
 // true
 ```
@@ -54,8 +104,7 @@ If you discover any security related issues, please email acr@antoniocarlosribei
 
 ## Credits
 
-- [Antonio Carlos Ribeiro][link-author]
-- [All Contributors][link-contributors]
+- [Antonio Carlos Ribeiro](https://twitter.com/iantonioribeiro)
 
 ## License
 
