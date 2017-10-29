@@ -10,11 +10,11 @@ shopt -s dotglob
  #
 collectVersion=5.5.16
 homeDir=.
-baseDir=src/tightenco
+baseDir=src/vendor/tightenco
 oldNamespace='Illuminate\\'
 newNamespace='Tightenco\\Collect\\'
 
-collectDir=${baseDir}/Collect
+collectDir=${baseDir}/collect
 repositoryDir=${collectDir}/collect-${collectVersion}
 collectZip=${collectDir}/collect.zip
 collectZipUrl=https://github.com/tightenco/collect/archive/v${collectVersion}.zip
@@ -32,15 +32,15 @@ function main()
 
     displayVariables
 
-#    createDir
-#
-#    download
-#
-#    extract
-#
-#    renameNamespace
-#
-#    copyTests
+    createDir
+
+    download
+
+    extract
+
+    renameNamespace
+
+    copyTests
 
     cleanupDir
 }

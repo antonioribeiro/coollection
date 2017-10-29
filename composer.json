@@ -28,7 +28,7 @@
     "autoload": {
         "psr-4": {
             "PragmaRX\\Coollection\\Package\\": "src/package",
-            "Tightenco\\Collect\\": "src/tightenco/src/Tightenco/Collect"
+            "Tightenco\\Collect\\": "src/vendor/tightenco/collect/src/Tightenco/Collect"
         },
         "files": [
             "src/package/Support/helpers.php"
