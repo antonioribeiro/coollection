@@ -51,7 +51,9 @@ It's Laravel's Collection, at full power, you can check [its docs](https://larav
 ``` php
 $collection->map($mapper)->reduce($reducer)->random()->address->street
 
-$collection->where('first_name', 'Barack')->reduce($reducer)->random()->address->street
+$this->sendThanks(
+    $collection->where('full_name', 'Barack Obama')->addresses->random()
+);    
 ```
 
 ## Changes to [tightenco/collect](https://github.com/tightenco/collect)
