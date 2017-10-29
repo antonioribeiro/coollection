@@ -74,7 +74,7 @@ $countries->where('name.common', 'United States')->first()->currency->symbol;
 
 ## Changes to [tightenco/collect](https://github.com/tightenco/collect)
 
-As it is still using [Illuminate's namespace](https://github.com/tightenco/collect/pull/56), which will conflict with **Illuminate\Support\Collection**, for those who need to use it in a Laravel project, this package has an [updater script](upgrade-collect.sh) which downloads tightenco/collect sources and change the namespace to [**Tightenco\Collect**](https://github.com/antonioribeiro/coolection/blob/master/src/package/Support/Tightenco/Collect/src/Tightenco/Collect/Support/Collection.php).  
+As it is still using [Illuminate's namespace](https://github.com/tightenco/collect/pull/56), which will conflict with **Illuminate\Support\Collection**, for those who need to use it in a Laravel project, this package has an [updater script](upgrade-collect.sh) which downloads tightenco/collect sources and change the namespace to [**Tightenco\Collect**](https://github.com/antonioribeiro/coolection/blob/master/src/vendor/tightenco/collect/src/Tightenco/Collect/Support/Collection.php).  
 
 ## Install
 
