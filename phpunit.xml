@@ -15,7 +15,6 @@
     <testsuites>
         <testsuite name="Laravel Test Suite">
             <directory suffix="Test.php">./tests</directory>
-            <exclude>src/package/Support/Tightenco/Collect/tests</exclude>
         </testsuite>
     </testsuites>
     <logging>
