@@ -15,7 +15,7 @@ $collection->name
 
 $collection->addresses->first()->street_name
 
-$collection->flatten()->cars->reject(function($car) { return $car->name == 'ferrari' })->last()->model
+$collection->flatten()->cars->filter(function($car) { return $car->name == 'ferrari' })->last()->model
 ```
 ## Why?
 
