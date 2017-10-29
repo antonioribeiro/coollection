@@ -50,6 +50,8 @@ It's Laravel's Collection, at full power, you can check [its docs](https://larav
 
 ``` php
 $collection->map($mapper)->reduce($reducer)->random()->address->street
+
+$collection->where('first_name', 'Barack')->reduce($reducer)->random()->address->street
 ```
 
 ## Changes to [tightenco/collect](https://github.com/tightenco/collect)
@@ -69,9 +71,9 @@ $ composer require pragmarx/coollection
 Instantiate, the class directly or using the helper:
 
 ``` php
-$c = new Coollection(['first_name' => 'Barak Obama']);
+$c = new Coollection(['first_name' => 'Barack Obama']);
 
-$c = coollect(['first_name' => 'Barak Obama']);
+$c = coollect(['first_name' => 'Barack Obama']);
 ``` 
 
 Then you use it as an object:
@@ -79,7 +81,7 @@ Then you use it as an object:
 ``` php
 echo $c->first_name;
 
-// Barak Obama
+// Barack Obama
 
 
 echo $c->flip()->barak_obama == 'first_name' 
