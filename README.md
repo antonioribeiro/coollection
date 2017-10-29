@@ -16,6 +16,8 @@ $collection->name
 $collection->addresses->first()->street_name
 
 $collection->flatten()->cars->filter(function($car) { return $car->name == 'ferrari' })->last()->model
+
+$countries->where('name.common', 'United States')->first()->currency->name->english;
 ```
 
 ## Why?
@@ -40,6 +42,18 @@ or
 $collection->cars->unique('constructor')->last()->model->colors->first()->rgb
 ```
 
+So you can write this:
+
+``` php
+collect($vimeo)->body->data->first()->metadata->connections->likes->total;
+```
+
+Instead of
+
+``` php
+collect($vimeo)['body']['data'][0]['metadata']['connections']['likes']['total'];
+```
+
 ## PHP Agnostic
 
 This is an agnostic PHP package, which uses an extracted version of Laravel's Illuminate Collection, it's actually [tightenco/collect](https://github.com/tightenco/collect), modified to access collection items as properties.
@@ -54,6 +68,8 @@ $collection->map($mapper)->reduce($reducer)->random()->address->street
 $this->sendThanks(
     $collection->where('full_name', 'Barack Obama')->addresses->random()
 );    
+
+$countries->where('name.common', 'United States')->first()->currency->symbol;
 ```
 
 ## Changes to [tightenco/collect](https://github.com/tightenco/collect)
