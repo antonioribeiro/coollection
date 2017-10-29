@@ -17,6 +17,7 @@ $collection->addresses->first()->street_name
 
 $collection->flatten()->cars->filter(function($car) { return $car->name == 'ferrari' })->last()->model
 ```
+
 ## Why?
 
 Answering with a question: which one is easier to look at?
