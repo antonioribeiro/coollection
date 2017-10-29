@@ -15,11 +15,13 @@ oldNamespace='Illuminate\\'
 newNamespace='Tightenco\\Collect\\'
 
 collectDir=${baseDir}/Collect
-repositoryDir=${collectDir}/collect-5.5.16
+repositoryDir=${collectDir}/collect-$g{collectVersion}
 collectZip=${collectDir}/collect.zip
+collectZipUrl=https://github.com/tightenco/collect/archive/v${collectVersion}.zip
 srcDir=${collectDir}/src
 tightencoNamespaceDir=${srcDir}/Tightenco/Collect
 illuminateNamespaceDir=${srcDir}/Illuminate
+
 
 ##
  # App
@@ -79,11 +81,9 @@ function createDir()
  #
 function download()
 {
-    FILE=https://github.com/tightenco/collect/archive/v${collectVersion}.zip
+    echo "Downloading ${collectZipUrl} to ${collectDir}"
 
-    echo "Downloading $FILE to ${collectDir}"
-
-    wget $FILE -O ${collectZip} >/dev/null 2>&1
+    wget ${collectZipUrl} -O ${collectZip} >/dev/null 2>&1
 }
 
 ##
