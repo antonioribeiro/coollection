@@ -999,4 +999,34 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals('["5.6","7.0","7.1","7.2"]', $this->coollection->skills->php->toJson());
     }
+
+
+    public function sendThanks($data)
+    {
+
+    }
+
+    public function testToJson()
+    {
+        $collection = $this->coollection->skills->laravel->take(1)->pad(2, '6.0');
+        $countries = $this->coollection->skills->laravel->take(1)->pad(2, '6.0');
+        $mapper = function () {};
+        $reducer = function () {};
+
+
+
+
+        $collection->map($mapper)->reduce($reducer)->random()->address->street;
+
+        $this->sendThanks(
+            $collection->where('full_name', 'Barack Obama')->addresses->random()
+        );
+
+        $countries->where('name.common', 'United States')->first()->currency->symbol;
+
+
+
+
+    }
+
 }

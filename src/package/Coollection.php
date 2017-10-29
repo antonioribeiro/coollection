@@ -3,6 +3,7 @@
 namespace PragmaRX\Coollection\Package;
 
 use Exception;
+use PragmaRX\Countries\Package\Support\Collection;
 use Traversable;
 use JsonSerializable;
 use Illuminate\Support\HigherOrderCollectionProxy;
@@ -13,6 +14,13 @@ use Tightenco\Collect\Support\Collection as TightencoCollection;
 class Coollection extends TightencoCollection
 {
     const NOT_FOUND = '!__NOT__FOUND__!';
+
+    /**
+     * Raise exception on null.
+     *
+     * @var Collection
+     */
+    public $addresses;
 
     /**
      * Raise exception on null.
