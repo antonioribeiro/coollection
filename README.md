@@ -113,8 +113,13 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 [ico-version]: https://img.shields.io/packagist/v/pragmarx/coollection.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/antonioribeiro/coollection/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/antonioribeiro/coollection.svg?style=flat-square
+
+[ico-travis-waiting]: https://img.shields.io/travis/antonioribeiro/coollection/master.svg?style=flat-square
+[ico-travis]: https://img.shields.io/badge/build-passing-green.svg?style=flat-square
+
+[ico-scrutinizer-waiting]: https://img.shields.io/scrutinizer/coverage/g/antonioribeiro/coollection.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/badge/coverage-92%20%25-green.svg?style=flat-square
+
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/antonioribeiro/coollection.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/pragmarx/coollection.svg?style=flat-square
 
