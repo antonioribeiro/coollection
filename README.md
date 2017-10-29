@@ -1,5 +1,5 @@
 # Coollection
-### Objectified Collection
+### Access collection items as properties
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
@@ -42,11 +42,11 @@ $collection->cars->unique('constructor')->last()->model->colors->first()->rgb
 
 ## PHP Agnostic
 
-This is an agnostic PHP package, which uses an extracted version of Laravel's Illuminate Collection, it's actually [tightenco/collect](https://github.com/tightenco/collect), modified to support object properties.
+This is an agnostic PHP package, which uses an extracted version of Laravel's Illuminate Collection, it's actually [tightenco/collect](https://github.com/tightenco/collect), modified to access collection items as properties.
 
 ## Documentation
 
-It's Laravel's Collection, at full power, you can check [its docs](https://laravel.com/docs/5.5/collections). The only difference is that you can access array keys as properties, like any other PHP object:
+It's Laravel's Collection, at full power, you can check [its docs](https://laravel.com/docs/5.5/collections). The only difference is that you can access items (array keys) as properties, like any other PHP object:
 
 ``` php
 $collection->map($mapper)->reduce($reducer)->random()->address->street
