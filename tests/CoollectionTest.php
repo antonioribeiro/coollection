@@ -5,7 +5,9 @@ namespace PragmaRX\Coollection;
 use PragmaRX\Coollection\Package\Coollection;
 use Tightenco\Collect\Support\Collection as TightencoCollect;
 
-class Dummy {}
+class Dummy
+{
+}
 
 class CoollectionTest extends \PHPUnit\Framework\TestCase
 {
@@ -262,7 +264,7 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testFilter()
     {
-        $compare = $this->coollection->skills->filter(function($item, $key) {
+        $compare = $this->coollection->skills->filter(function ($item, $key) {
             return $key != 'php';
         });
 

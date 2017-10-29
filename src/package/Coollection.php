@@ -19,7 +19,7 @@ class Coollection extends TightencoCollection
      *
      * @static boolean
      */
-    static $raiseExceptionOnNull = true;
+    public static $raiseExceptionOnNull = true;
 
     /**
      * Take the first item.
@@ -57,7 +57,7 @@ class Coollection extends TightencoCollection
             return $key;
         }
 
-        $value = $this->keys()->mapWithKeys(function($item) {
+        $value = $this->keys()->mapWithKeys(function ($item) {
             return [snake($item) => $item];
         })->get($key);
 
