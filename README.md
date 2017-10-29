@@ -1,5 +1,4 @@
 # Coollection
-### Access collection items as properties
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
@@ -8,7 +7,7 @@
 <!-- [![Total Downloads][ico-downloads]][link-downloads] -->
 <!-- [![Quality Score][ico-code-quality]][link-code-quality] -->
 
-Access your collection items as properties:
+#### Access collection items as object properties
 
 ``` php
 $collection->name
@@ -42,13 +41,14 @@ or
 $collection->cars->unique('constructor')->last()->model->colors->first()->rgb
 ```
 
-So you can write this:
+Isn't this easier on the eyes?
 
 ``` php
 collect($vimeo)->body->data->first()->metadata->connections->likes->total;
 ```
 
-Instead of
+Or you prefer this one?
+
 
 ``` php
 collect($vimeo)['body']['data'][0]['metadata']['connections']['likes']['total'];
@@ -60,7 +60,7 @@ This is an agnostic PHP package, which uses an extracted version of Laravel's Il
 
 ## Documentation
 
-It's Laravel's Collection, at full power, you can check [its docs](https://laravel.com/docs/5.5/collections). The only difference is that you can access items (array keys) as properties, like any other PHP object:
+It's Laravel's Collection, at full power, so you can check [its docs](https://laravel.com/docs/5.5/collections). The only difference is that you can access items (array keys) as properties, like any other PHP object:
 
 ``` php
 $collection->map($mapper)->reduce($reducer)->random()->address->street
