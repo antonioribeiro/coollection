@@ -10,12 +10,12 @@ shopt -s dotglob
  #
 collectVersion=5.5.16
 homeDir=.
-baseDir=src/package/Support/Tightenco
+baseDir=src/tightenco
 oldNamespace='Illuminate\\'
 newNamespace='Tightenco\\Collect\\'
 
 collectDir=${baseDir}/Collect
-repositoryDir=${collectDir}/collect-$g{collectVersion}
+repositoryDir=${collectDir}/collect-${collectVersion}
 collectZip=${collectDir}/collect.zip
 collectZipUrl=https://github.com/tightenco/collect/archive/v${collectVersion}.zip
 srcDir=${collectDir}/src
@@ -30,17 +30,17 @@ function main()
 {
     echo "Upgrading Collect..."
 
-    # displayVariables
+    displayVariables
 
-    createDir
-
-    download
-
-    extract
-
-    renameNamespace
-
-    copyTests
+#    createDir
+#
+#    download
+#
+#    extract
+#
+#    renameNamespace
+#
+#    copyTests
 
     cleanupDir
 }
@@ -107,12 +107,14 @@ function extract()
  #
 function cleanupDir()
 {
-    echo "Cleaning up Tightenco..."
+    echo "Cleaning up Tightenco dir..."
 
-    rm -rf ${collectDir}/tests
-    rm ${collectDir}/phpunit.xml
+    mv ${collectDir}/src ${collectDir}/../
+
+    rm -rf ${collectDir}/*
+
+    mv ${collectDir}/../src ${collectDir}/
 }
-
 
 ##
  # Copy tests to our tests dir

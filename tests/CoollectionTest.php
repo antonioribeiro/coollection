@@ -1,13 +1,10 @@
 <?php
 
-namespace PragmaRX\Coollection;
+namespace PragmaRX\Coollection\Tests;
 
 use PragmaRX\Coollection\Package\Coollection;
+use PragmaRX\Coollection\Tests\Support\Dummy;
 use Tightenco\Collect\Support\Collection as TightencoCollect;
-
-class Dummy
-{
-}
 
 class CoollectionTest extends \PHPUnit\Framework\TestCase
 {

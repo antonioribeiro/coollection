@@ -27,8 +27,8 @@
     },
     "autoload": {
         "psr-4": {
-            "PragmaRX\\Coollection\\": "src/package",
-            "Tightenco\\Collect\\": "src/package/Support/Tightenco/Collect/src/Tightenco/Collect"
+            "PragmaRX\\Coollection\\Package\\": "src/package",
+            "Tightenco\\Collect\\": "src/tightenco/src/Tightenco/Collect"
         },
         "files": [
             "src/package/Support/helpers.php"
@@ -36,7 +36,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "PragmaRX\\Coollection\\": "tests"
+            "PragmaRX\\Coollection\\Tests\\": "tests"
         }
     },
     "scripts": {
