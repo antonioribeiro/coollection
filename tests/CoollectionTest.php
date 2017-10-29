@@ -1003,15 +1003,16 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function sendThanks($data)
     {
-
     }
 
     public function testToJson()
     {
         $collection = $this->coollection->skills->laravel->take(1)->pad(2, '6.0');
         $countries = $this->coollection->skills->laravel->take(1)->pad(2, '6.0');
-        $mapper = function () {};
-        $reducer = function () {};
+        $mapper = function () {
+        };
+        $reducer = function () {
+        };
 
 
 
@@ -1023,10 +1024,5 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         );
 
         $countries->where('name.common', 'United States')->first()->currency->symbol;
-
-
-
-
     }
-
 }
