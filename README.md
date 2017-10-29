@@ -46,7 +46,11 @@ This is an agnostic PHP package, which uses an extracted version of Laravel's Il
 
 ## Documentation
 
-It's Laravel's Collection, at full power, you can check [its docs](https://laravel.com/docs/5.5/collections). The only difference is that you can access array keys as properties, like any other object.
+It's Laravel's Collection, at full power, you can check [its docs](https://laravel.com/docs/5.5/collections). The only difference is that you can access array keys as properties, like any other PHP object:
+
+``` php
+$collection->map($mapper)->reduce($reducer)->random()->address->street
+```
 
 ## Changes to [tightenco/collect](https://github.com/tightenco/collect)
 
