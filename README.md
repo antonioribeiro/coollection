@@ -21,7 +21,7 @@ $countries->where('name.common', 'United States')->first()->currency->name->engl
 
 ## Why?
 
-Answering with a question: which one is easier to look at?
+#### Answering with a question: which one is easier to look at?
 
 ``` php
 collect(
@@ -41,7 +41,7 @@ or
 $collection->cars->unique('constructor')->last()->model->colors->first()->rgb
 ```
 
-Isn't this easier on the eyes?
+#### Isn't this easier on the eyes?
 
 ``` php
 collect($vimeo)->body->data->first()->metadata->connections->likes->total;
@@ -54,7 +54,7 @@ Or you prefer this one?
 collect($vimeo)['body']['data'][0]['metadata']['connections']['likes']['total'];
 ```
 
-Used with Laravel request it is useful, if you receive:
+#### Used with Laravel request it is useful, if you receive:
  
 ``` json
 {"pagination":{"perPage":100,"pageNumber":1}}
