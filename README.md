@@ -54,6 +54,28 @@ Or you prefer this one?
 collect($vimeo)['body']['data'][0]['metadata']['connections']['likes']['total'];
 ```
 
+Used with Laravel request it is useful, if you receive:
+ 
+``` json
+{"pagination":{"perPage":100,"pageNumber":1}}
+```
+
+You `collect()` it:
+
+$input = coollect($request->all());
+
+And you can just:
+
+``` php
+$input->pagination->perPage
+```
+
+Instead of:
+
+``` php
+$input->get('pagination')['perPage']
+```
+
 ## PHP Agnostic
 
 This is an agnostic PHP package, which uses an extracted version of Laravel's Illuminate Collection, it's actually [tightenco/collect](https://github.com/tightenco/collect), modified to access collection items as properties.
