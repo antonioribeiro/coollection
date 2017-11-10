@@ -62,7 +62,9 @@ collect($vimeo)['body']['data'][0]['metadata']['connections']['likes']['total'];
 
 You `collect()` it:
 
+``` php
 $input = coollect($request->all());
+```
 
 And you can just:
 
