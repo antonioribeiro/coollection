@@ -8,7 +8,7 @@ if (! function_exists('coollect')) {
      * Create a collection from the given value.
      *
      * @param  mixed  $value
-     * @return \Tightenco\Collect\Support\Collection
+     * @return \PragmaRX\Coollection\Package\Coollection
      */
     function coollect($value = null)
     {
