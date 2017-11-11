@@ -12,7 +12,24 @@ use Tightenco\Collect\Support\Collection as TightencoCollection;
 
 class Coollection extends TightencoCollection
 {
+    /**
+     * Consants
+     */
     const NOT_FOUND = '!__NOT__FOUND__!';
+
+    /**
+     * The items contained in the collection.
+     *
+     * @var array
+     */
+    protected $__items;
+
+    /**
+     * The items contained in the collection.
+     *
+     * @var array
+     */
+    protected $allowItems = false;
 
     /**
      * Raise exception on null.
@@ -20,6 +37,147 @@ class Coollection extends TightencoCollection
      * @static boolean
      */
     public static $raiseExceptionOnNull = true;
+
+    /**
+     * Create a new coollection.
+     *
+     * @param  mixed  $items
+     * @return void
+     */
+    public function __construct($items = [])
+    {
+        parent::__construct($items);
+
+        $this->initialize();
+    }
+
+    /**
+     * Dynamically access collection proxies.
+     *
+     * @param  string  $key
+     * @return mixed|static
+     *
+     * @throws \Exception
+     */
+    public function __get($key)
+    {
+        if ($key == 'items') {
+            return $this->__items;
+        }
+
+        if (property_exists($this, $key)) {
+            return $this->{$key};
+        }
+
+        if (($value = $this->getByPropertyName($key)) !== static::NOT_FOUND) {
+            return $value;
+        }
+
+        if (!in_array($key, static::$proxies)) {
+            if (static::$raiseExceptionOnNull) {
+                throw new Exception("Property [{$key}] does not exist on this collection instance.");
+            }
+
+            return null;
+        }
+
+        return new HigherOrderCollectionProxy($this, $key);
+    }
+
+    /**
+     * Dynamically access collection proxies.
+     *
+     * @param  string  $key
+     * @return mixed|static
+     *
+     * @throws \Exception
+     */
+    public function __isset($key)
+    {
+        if ($key == 'items') {
+            $key = '__items';
+        }
+
+        return isset($this->{$key});
+    }
+
+    /**
+     * Dynamically access collection proxies.
+     *
+     * @param  string  $key
+     *
+     * @throws \Exception
+     */
+    public function __set($key, $value)
+    {
+        if ($key == 'items') {
+            $key = $this->allowItems ? 'items' : '__items';
+
+            $this->{$key} = $value;
+
+            return;
+        }
+
+        if (property_exists($this, $key)) {
+            $this->{$key} = $value;
+
+            return;
+        }
+
+        throw new Exception("Property [{$key}] does not exist on this collection instance.");
+    }
+
+    /**
+     * Create the items array based on the internal __items.
+     */
+    private function createItems()
+    {
+        $this->allowItems = true;
+
+        $this->items = $this->__items;
+    }
+
+    /**
+     * Store and drop items.
+     */
+    private function dropItems()
+    {
+        $this->__items = $this->items;
+
+        unset($this->items);
+
+        $this->allowItems = false;
+    }
+
+    /**
+     * Execute a callback over each item.
+     *
+     * @param  callable  $callback
+     * @return $this
+     */
+    public function each(callable $callback)
+    {
+        return $this->wrapIfArrayable(
+            parent::each(
+                $this->coollectizeCallback($callback)
+            )
+        );
+    }
+
+    /**
+     * Run a filter over each of the items.
+     *
+     * @param  callable|null  $callback
+     * @return static
+     */
+    public function filter(callable $callback = null)
+    {
+        return $this->wrapIfArrayable(
+            parent::filter(
+                $this->coollectizeCallback($callback)
+            )
+        );
+    }
 
     /**
      * Take the first item.
@@ -30,7 +188,12 @@ class Coollection extends TightencoCollection
      */
     public function first(callable $callback = null, $default = null)
     {
-        return $this->wrap(parent::first($callback, $default));
+        return $this->wrapIfArrayable(
+            parent::first(
+                $this->coollectizeCallback($callback),
+                $default
+            )
+        );
     }
 
     /**
@@ -53,7 +216,7 @@ class Coollection extends TightencoCollection
      */
     private function getArrayKey($key)
     {
-        if (array_key_exists($key, $this->items)) {
+        if (array_key_exists($key, (array) $this->__items)) {
             return $key;
         }
 
@@ -75,14 +238,82 @@ class Coollection extends TightencoCollection
     private function getByPropertyName($key)
     {
         if (($key = $this->getArrayKey($key)) !== static::NOT_FOUND) {
-            if (is_array($this->items[$key])) {
-                return $this->wrap($this->items[$key]);
+            if (is_array($this->__items[$key])) {
+                return $this->wrapIfArrayable($this->__items[$key]);
             }
 
-            return $this->items[$key];
+            return $this->__items[$key];
         }
 
         return static::NOT_FOUND;
+    }
+
+    /**
+     * Initialize Coolection.
+     */
+    private function initialize()
+    {
+        $this->dropItems();
+    }
+
+    /**
+     * Get the keys of the collection items.
+     *
+     * @return static
+     */
+    public function keys()
+    {
+        return $this->runViaLaravelCollection(function () {
+            return parent::keys();
+        });
+    }
+
+    /**
+     * Run a map over each of the items.
+     *
+     * @param  callable  $callback
+     * @return static
+     */
+    public function map(callable $callback)
+    {
+        return $this->wrapIfArrayable(
+            parent::map(
+                $this->coollectizeCallback($callback)
+            )
+        );
+    }
+
+    /**
+     * Run a dictionary map over the items.
+     *
+     * The callback should return an associative array with a single key/value pair.
+     *
+     * @param  callable  $callback
+     * @return static
+     */
+    public function mapToDictionary(callable $callback)
+    {
+        return $this->runViaLaravelCollection(function() use ($callback) {
+            return parent::mapToDictionary(
+                $callback
+            );
+        });
+    }
+
+    /**
+     * Execute a closure via Laravel's Collection
+     * @param $param
+     * @return Coollection
+     */
+    private function runViaLaravelCollection($param)
+    {
+        $this->createItems();
+
+        $result = $this->wrapIfArrayable($param());
+
+        $this->dropItems();
+
+        return $result;
     }
 
     /**
@@ -102,7 +333,23 @@ class Coollection extends TightencoCollection
      */
     public function pop()
     {
-        return $this->wrap(parent::pop());
+        return $this->runViaLaravelCollection(function() {
+            return parent::pop();
+        });
+    }
+
+    /**
+     * Get and remove an item from the collection.
+     *
+     * @param  mixed  $key
+     * @param  mixed  $default
+     * @return mixed
+     */
+    public function pull($key, $default = null)
+    {
+        return $this->runViaLaravelCollection(function() use ($key, $default) {
+            return parent::pull($key, $default);
+        });
     }
 
     /**
@@ -114,7 +361,7 @@ class Coollection extends TightencoCollection
      */
     public function reduce(callable $callback, $initial = null)
     {
-        return $this->wrap(parent::reduce($callback, $initial));
+        return $this->wrapIfArrayable(parent::reduce($callback, $initial));
     }
 
     /**
@@ -134,36 +381,30 @@ class Coollection extends TightencoCollection
      */
     public function shift()
     {
-        return $this->wrapIfArrayable(parent::shift());
+        return $this->runViaLaravelCollection(function() {
+            return parent::shift();
+        });
     }
 
     /**
-     * Dynamically access collection proxies.
+     * Splice a portion of the underlying collection array.
      *
-     * @param  string  $key
-     * @return mixed|static
-     *
-     * @throws \Exception
+     * @param  int  $offset
+     * @param  int|null  $length
+     * @param  mixed  $replacement
+     * @return static
      */
-    public function __get($key)
+    public function splice($offset, $length = null, $replacement = [])
     {
-        if (property_exists($this, $key)) {
-            return $this->{$key};
-        }
+        $args = func_num_args();
 
-        if (($value = $this->getByPropertyName($key)) !== static::NOT_FOUND) {
-            return $value;
-        }
-
-        if (!in_array($key, static::$proxies)) {
-            if (static::$raiseExceptionOnNull) {
-                throw new Exception("Property [{$key}] does not exist on this collection instance.");
+        return $this->runViaLaravelCollection(function () use ($offset, $length, $replacement, $args) {
+            if ($args == 1) {
+                return parent::splice($offset);
             }
 
-            return null;
-        }
-
-        return new HigherOrderCollectionProxy($this, $key);
+            return parent::splice($offset, $length, $replacement);
+        });
     }
 
     /**
@@ -250,5 +491,71 @@ class Coollection extends TightencoCollection
 
             $exists[] = $id;
         });
+    }
+
+    /**
+     * Determine if an item exists at an offset.
+     *
+     * @param  mixed  $key
+     * @return bool
+     */
+    public function offsetExists($key)
+    {
+        return array_key_exists($key, $this->__items);
+    }
+
+    /**
+     * Get an item at a given offset.
+     *
+     * @param  mixed  $key
+     * @return mixed
+     */
+    public function offsetGet($key)
+    {
+        return $this->__items[$key];
+    }
+
+    /**
+     * Set the item at a given offset.
+     *
+     * @param  mixed  $key
+     * @param  mixed  $value
+     * @return void
+     */
+    public function offsetSet($key, $value)
+    {
+        if (is_null($key)) {
+            $this->__items[] = $value;
+        } else {
+            $this->__items[$key] = $value;
+        }
+    }
+
+    /**
+     * Unset the item at a given offset.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    public function offsetUnset($key)
+    {
+        unset($this->__items[$key]);
+    }
+
+    /**
+     * @param $originalCallback
+     * @return callable
+     */
+    public function coollectizeCallback(callable $originalCallback = null)
+    {
+        if (is_null($originalCallback)) {
+            return null;
+        }
+
+        return function($value, $key) use ($originalCallback) {
+            return $originalCallback(
+                $this->wrapIfArrayable($value), $key
+            );
+        };
     }
 }
