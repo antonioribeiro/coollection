@@ -293,7 +293,7 @@ class Coollection extends TightencoCollection
      */
     public function mapToDictionary(callable $callback)
     {
-        return $this->runViaLaravelCollection(function() use ($callback) {
+        return $this->runViaLaravelCollection(function () use ($callback) {
             return parent::mapToDictionary(
                 $callback
             );
@@ -333,7 +333,7 @@ class Coollection extends TightencoCollection
      */
     public function pop()
     {
-        return $this->runViaLaravelCollection(function() {
+        return $this->runViaLaravelCollection(function () {
             return parent::pop();
         });
     }
@@ -347,7 +347,7 @@ class Coollection extends TightencoCollection
      */
     public function pull($key, $default = null)
     {
-        return $this->runViaLaravelCollection(function() use ($key, $default) {
+        return $this->runViaLaravelCollection(function () use ($key, $default) {
             return parent::pull($key, $default);
         });
     }
@@ -381,7 +381,7 @@ class Coollection extends TightencoCollection
      */
     public function shift()
     {
-        return $this->runViaLaravelCollection(function() {
+        return $this->runViaLaravelCollection(function () {
             return parent::shift();
         });
     }
@@ -552,7 +552,7 @@ class Coollection extends TightencoCollection
             return null;
         }
 
-        return function($value, $key) use ($originalCallback) {
+        return function ($value, $key) use ($originalCallback) {
             return $originalCallback(
                 $this->wrapIfArrayable($value), $key
             );
