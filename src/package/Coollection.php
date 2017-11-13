@@ -81,7 +81,7 @@ class Coollection extends TightencoCollection
             return null;
         }
 
-        return new HigherOrderCollectionProxy($this, $key);
+        return new HigherOrderCollectionProxy(collect($this), $key);
     }
 
     /**
