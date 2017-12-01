@@ -8,7 +8,7 @@ shopt -s dotglob
 ##
  # Define all variables
  #
-collectVersion=5.5.16
+collectVersion=5.5.20
 homeDir=.
 baseDir=src/vendor/tightenco
 oldNamespace='Illuminate\\'
