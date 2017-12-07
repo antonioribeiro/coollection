@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Coollection\Support;
+namespace PragmaRX\Coollection\Package\Support;
 
 class Str
 {

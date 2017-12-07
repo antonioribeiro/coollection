@@ -1,6 +1,6 @@
 <?php
 
-use PragmaRX\Coollection\Support\Str;
+use PragmaRX\Coollection\Package\Support\Str;
 use PragmaRX\Coollection\Package\Coollection;
 
 if (! function_exists('coollect')) {
