@@ -108,6 +108,8 @@ function cleanupDir()
  #
 function getCurrentCollectVersion()
 {
+    echo Getting current version from https://github.com/tightenco/collect.git...
+
     collectVersion=$(git ls-remote https://github.com/tightenco/collect.git | grep tags/ | grep -v {} | cut -d \/ -f 3 | cut -d v -f 2 | sort --version-sort | tail -1)
 
     echo Upgrading to tightenco/collect $collectVersion

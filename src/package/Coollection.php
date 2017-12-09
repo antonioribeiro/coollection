@@ -303,7 +303,7 @@ class Coollection extends TightencoCollection
     /**
      * Execute a closure via Laravel's Collection
      * @param $param
-     * @return Coollection
+     * @return Coollection|array
      */
     private function runViaLaravelCollection($param)
     {
@@ -557,5 +557,21 @@ class Coollection extends TightencoCollection
                 $this->wrapIfArrayable($value), $key
             );
         };
+    }
+
+    /**
+     * Get the collection of items as a plain array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $this->createItems();
+
+        $result = parent::toArray();
+
+        $this->dropItems();
+
+        return $result;
     }
 }

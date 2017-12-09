@@ -999,6 +999,11 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('["5.6","7.0","7.1","7.2"]', $this->coollection->skills->php->toJson());
     }
 
+    public function testToArray()
+    {
+        $this->assertEquals(["5.6","7.0","7.1","7.2"], $this->coollection->skills->php->toArray());
+    }
+
     // public function map(callable $callback) TODO
     // public function mapSpread(callable $callback) TODO
     // public function mapToDictionary(callable $callback) TODO

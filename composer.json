@@ -18,7 +18,8 @@
         }
     ],
     "require": {
-        "php" : ">=7.0"
+        "php" : ">=7.0",
+        "symfony/var-dumper": "~3.3"
     },
     "require-dev": {
         "phpunit/phpunit" : ">=6.0",
@@ -28,7 +29,9 @@
     "autoload": {
         "psr-4": {
             "PragmaRX\\Coollection\\Package\\": "src/package",
-            "Tightenco\\Collect\\": "src/vendor/tightenco/collect/src/Tightenco/Collect"
+            "PragmaRX\\Coollection\\Tests\\": "tests",
+            "Tightenco\\Collect\\": "src/vendor/tightenco/collect/src/Tightenco/Collect",
+            "Tightenco\\Collect\\Tests\\Support\\": "tests"
         },
         "files": [
             "src/package/Support/helpers.php"
