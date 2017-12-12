@@ -606,8 +606,8 @@ class Coollection extends TightencoCollection
             return null;
         }
 
-        return function($carry, $item) use ($originalCallback) {
-          return $originalCallback(
+        return function ($carry, $item) use ($originalCallback) {
+            return $originalCallback(
               $carry,
               $this->__wrap($item)
           );
