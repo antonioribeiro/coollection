@@ -48,7 +48,9 @@ class Coollection extends TightencoCollection
     {
         parent::__construct($items);
 
-        $this->initialize();
+        $this->__items = $this->items;
+
+        unset($this->items);
     }
 
     /**
@@ -128,13 +130,34 @@ class Coollection extends TightencoCollection
     }
 
     /**
+     * Get all of the items in the collection.
+     *
+     * @return array
+     */
+    public function all()
+    {
+        return $this->toArray();
+    }
+
+    /**
      * Create the items array based on the internal __items.
      */
     private function createItems()
     {
         $this->allowItems = true;
 
-        $this->items = $this->__items;
+        $this->items = $this->toRawArray($this->__items);
+    }
+
+    /**
+     * To array.
+     *
+     * @param $items
+     * @return mixed
+     */
+    public function toRawArray($items)
+    {
+        return json_decode(json_encode($items), true);
     }
 
     /**
@@ -142,7 +165,7 @@ class Coollection extends TightencoCollection
      */
     private function dropItems()
     {
-        $this->__items = $this->items;
+        $this->__items = coollect($this->items);
 
         unset($this->items);
 
@@ -157,7 +180,7 @@ class Coollection extends TightencoCollection
      */
     public function each(callable $callback)
     {
-        return $this->wrapIfArrayable(
+        return $this->__wrap(
             parent::each(
                 $this->coollectizeCallback($callback)
             )
@@ -172,11 +195,11 @@ class Coollection extends TightencoCollection
      */
     public function filter(callable $callback = null)
     {
-        return $this->wrapIfArrayable(
-            parent::filter(
+        return $this->runViaLaravelCollection(function () use ($callback) {
+            return parent::filter(
                 $this->coollectizeCallback($callback)
-            )
-        );
+            );
+        });
     }
 
     /**
@@ -188,7 +211,7 @@ class Coollection extends TightencoCollection
      */
     public function first(callable $callback = null, $default = null)
     {
-        return $this->wrapIfArrayable(
+        return $this->__wrap(
             parent::first(
                 $this->coollectizeCallback($callback),
                 $default
@@ -205,7 +228,7 @@ class Coollection extends TightencoCollection
      */
     public function get($key, $default = null)
     {
-        return $this->wrapIfArrayable(parent::get($key, $default));
+        return $this->__wrap(parent::get($key, $default));
     }
 
     /**
@@ -216,7 +239,7 @@ class Coollection extends TightencoCollection
      */
     private function getArrayKey($key)
     {
-        if (array_key_exists($key, (array) $this->__items)) {
+        if (array_key_exists($key, $this->toRawArray($this->__items))) {
             return $key;
         }
 
@@ -239,21 +262,13 @@ class Coollection extends TightencoCollection
     {
         if (($key = $this->getArrayKey($key)) !== static::NOT_FOUND) {
             if (is_array($this->__items[$key])) {
-                return $this->wrapIfArrayable($this->__items[$key]);
+                return $this->__wrap($this->__items[$key]);
             }
 
             return $this->__items[$key];
         }
 
         return static::NOT_FOUND;
-    }
-
-    /**
-     * Initialize Coolection.
-     */
-    private function initialize()
-    {
-        $this->dropItems();
     }
 
     /**
@@ -276,11 +291,11 @@ class Coollection extends TightencoCollection
      */
     public function map(callable $callback)
     {
-        return $this->wrapIfArrayable(
-            parent::map(
+        return $this->runViaLaravelCollection(function () use ($callback) {
+            return parent::map(
                 $this->coollectizeCallback($callback)
-            )
-        );
+            );
+        });
     }
 
     /**
@@ -309,7 +324,7 @@ class Coollection extends TightencoCollection
     {
         $this->createItems();
 
-        $result = $this->wrapIfArrayable($param());
+        $result = $this->__wrap($param());
 
         $this->dropItems();
 
@@ -361,7 +376,22 @@ class Coollection extends TightencoCollection
      */
     public function reduce(callable $callback, $initial = null)
     {
-        return $this->wrapIfArrayable(parent::reduce($callback, $initial));
+        return $this->runViaLaravelCollection(function () use ($callback, $initial) {
+            return parent::reduce($callback, $initial);
+        });
+    }
+
+    /**
+     * Merge the collection with the given items.
+     *
+     * @param  mixed  $items
+     * @return static
+     */
+    public function merge($items)
+    {
+        return $this->runViaLaravelCollection(function () use ($items) {
+            return parent::merge($items);
+        });
     }
 
     /**
@@ -431,10 +461,14 @@ class Coollection extends TightencoCollection
      * @param $value
      * @return static
      */
-    private function wrapIfArrayable($value)
+    protected function __wrap($value)
     {
+        if (is_object($value)) {
+            return $value;
+        }
+
         return $this->isArrayable($value)
-            ? $this->wrap($value)
+            ? new static(parent::wrap($value)->toArray())
             : $value;
     }
 
@@ -447,7 +481,7 @@ class Coollection extends TightencoCollection
      */
     public function last(callable $callback = null, $default = null)
     {
-        return $this->wrapIfArrayable(parent::last($callback, $default));
+        return $this->__wrap(parent::last($callback, $default));
     }
 
     /**
@@ -460,7 +494,7 @@ class Coollection extends TightencoCollection
      */
     public function random($number = null)
     {
-        return $this->wrapIfArrayable(parent::random($number));
+        return $this->__wrap(parent::random($number));
     }
 
     /**
@@ -471,7 +505,7 @@ class Coollection extends TightencoCollection
      */
     public function mode($key = null)
     {
-        return $this->wrapIfArrayable(parent::mode($key));
+        return $this->__wrap(parent::mode($key));
     }
 
     /**
@@ -554,7 +588,7 @@ class Coollection extends TightencoCollection
 
         return function ($value, $key) use ($originalCallback) {
             return $originalCallback(
-                $this->wrapIfArrayable($value), $key
+                $this->__wrap($value), $key
             );
         };
     }
@@ -573,5 +607,57 @@ class Coollection extends TightencoCollection
         $this->dropItems();
 
         return $result;
+    }
+
+    /**
+     * Intersect the collection with the given items.
+     *
+     * @param  mixed  $items
+     * @return static
+     */
+    public function intersect($items)
+    {
+        return $this->runViaLaravelCollection(function () use ($items) {
+            return parent::intersect($items);
+        });
+    }
+
+    /**
+     * Intersect the collection with the given items by key.
+     *
+     * @param  mixed  $items
+     * @return static
+     */
+    public function intersectByKeys($items)
+    {
+        return $this->runViaLaravelCollection(function () use ($items) {
+            return parent::intersectByKeys($items);
+        });
+    }
+
+    /**
+     * Get the items in the collection whose keys are not present in the given items.
+     *
+     * @param  mixed  $items
+     * @return static
+     */
+    public function diffKeys($items)
+    {
+        return $this->runViaLaravelCollection(function () use ($items) {
+            return parent::diffKeys($items);
+        });
+    }
+
+    /**
+     * Get the items in the collection whose keys and values are not present in the given items.
+     *
+     * @param  mixed  $items
+     * @return static
+     */
+    public function diffAssoc($items)
+    {
+        return $this->runViaLaravelCollection(function () use ($items) {
+            return parent::diffAssoc($items);
+        });
     }
 }

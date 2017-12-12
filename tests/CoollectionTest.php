@@ -433,11 +433,11 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     {
         $values = $this->coollection->accounting->pluck('product')->values();
 
-        $tco = new TightencoCollect($values->toArray());
+        $tco = $values->toArray();
 
         $this->assertEquals(
             $values->intersect($tco)->toArray(),
-            $tco->toArray()
+            $tco
         );
 
         $this->assertInstanceOf(Coollection::class, $values->intersect($tco));
@@ -447,11 +447,11 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     {
         $values = $this->coollection->accounting->pluck('product')->values();
 
-        $tco = new TightencoCollect($values->toArray());
+        $tco = $values->toArray();
 
         $this->assertEquals(
             $values->intersectByKeys($tco)->toArray(),
-            $tco->toArray()
+            $tco
         );
 
         $this->assertInstanceOf(Coollection::class, $values->intersect($tco));
@@ -612,11 +612,19 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     public function testMerge()
     {
         $result = [
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 39,
-            10, 9, 9, 10, 8, 6, 5,
+            0 => "5.6",
+            1 => "7.0",
+            2 => "7.1",
+            3 => "7.2",
+            "pro" => true,
+            "landscape" => true,
+            "concerts" => true,
+            "wedding" => true,
+            "studio" => true,
+            "nature" => false,
         ];
 
-        $c = $this->coollection->ages->merge($this->coollection->grades);
+        $c = $this->coollection->skills->php->merge($this->coollection->skills->photography);
 
         $this->assertEquals($result, $c->toArray());
 
@@ -780,6 +788,7 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     {
         $return = 'reduced';
 
+        // TODO --- should be erroring!!!!
         $c = $this->coollection->skills->reduce(function () use ($return) {
             return $return;
         });
