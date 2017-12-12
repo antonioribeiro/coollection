@@ -377,7 +377,10 @@ class Coollection extends TightencoCollection
     public function reduce(callable $callback, $initial = null)
     {
         return $this->runViaLaravelCollection(function () use ($callback, $initial) {
-            return parent::reduce($callback, $initial);
+            return parent::reduce(
+                $this->coollectizeCallbackForReduce($callback),
+                $initial
+            );
         });
     }
 
@@ -590,6 +593,24 @@ class Coollection extends TightencoCollection
             return $originalCallback(
                 $this->__wrap($value), $key
             );
+        };
+    }
+
+    /**
+     * @param $originalCallback
+     * @return callable
+     */
+    public function coollectizeCallbackForReduce(callable $originalCallback = null)
+    {
+        if (is_null($originalCallback)) {
+            return null;
+        }
+
+        return function($carry, $item) use ($originalCallback) {
+          return $originalCallback(
+              $carry,
+              $this->__wrap($item)
+          );
         };
     }
 

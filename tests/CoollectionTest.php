@@ -786,14 +786,12 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testReduce()
     {
-        $return = 'reduced';
+        $return = $this->coollection->skills->reduce(function ($carry, $value) {
+            $this->assertInstanceOf(Coollection::class, $value);
+            return $carry + 100 + 1;
+        }, 100);
 
-        // TODO --- should be erroring!!!!
-        $c = $this->coollection->skills->reduce(function () use ($return) {
-            return $return;
-        });
-
-        $this->assertEquals($return, $c);
+        $this->assertEquals($return, 403);
     }
 
     public function testReject()
