@@ -146,18 +146,22 @@ class Coollection extends TightencoCollection
     {
         $this->allowItems = true;
 
-        $this->items = $this->toRawArray($this->__items);
+        $this->items = $this->__toArray();
     }
 
     /**
      * To array.
      *
      * @param $items
-     * @return mixed
+     * @return mixed|null
      */
-    public function toRawArray($items)
+    public function __toArray($items = null)
     {
-        return json_decode(json_encode($items), true);
+        $items = is_null($items) ? $this->__items : $items;
+
+        return array_map(function ($value) {
+            return $value instanceof Arrayable ? $value->toArray() : $value;
+        }, $items instanceof Arrayable ? $items->toArray() : $items);
     }
 
     /**
@@ -239,7 +243,7 @@ class Coollection extends TightencoCollection
      */
     private function getArrayKey($key)
     {
-        if (array_key_exists($key, $this->toRawArray($this->__items))) {
+        if (array_key_exists($key, $this->__toArray())) {
             return $key;
         }
 
