@@ -12,6 +12,10 @@ if (! function_exists('coollect')) {
      */
     function coollect($value = null)
     {
+        if ($value instanceof Coollection) {
+            return $value;
+        }
+
         return new Coollection($value);
     }
 }
