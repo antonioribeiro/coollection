@@ -579,6 +579,26 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(Coollection::class, $c);
     }
 
+    public function testMapWithKeysChangeKey()
+    {
+        $data = new Coollection([
+            'id1' => 1,
+            'id2' => 2,
+            'id3' => 3,
+        ]);
+        $data = $data->mapWithKeys(function ($item, $key) {
+            return ["{$key}_changed" => $item];
+        });
+        $this->assertSame(
+            [
+                'id1_changed' => 1,
+                'id2_changed' => 2,
+                'id3_changed' => 3,
+            ],
+            $data->toArray()
+        );
+    }
+
     public function testFlatMap()
     {
         $c = $this->coollection->accounting->flatMap(function ($item) {
