@@ -169,7 +169,7 @@ class Coollection extends TightencoCollection
      */
     private function dropItems()
     {
-        $this->__items = coollect($this->items);
+        $this->__items = $this->items;
 
         unset($this->items);
 
@@ -459,7 +459,7 @@ class Coollection extends TightencoCollection
             $items instanceof Jsonable ||
             $items instanceof JsonSerializable ||
             $items instanceof Traversable
-        ;
+            ;
     }
 
     /**
@@ -612,9 +612,9 @@ class Coollection extends TightencoCollection
 
         return function ($carry, $item) use ($originalCallback) {
             return $originalCallback(
-              $carry,
-              $this->__wrap($item)
-          );
+                $carry,
+                $this->__wrap($item)
+            );
         };
     }
 
@@ -684,5 +684,18 @@ class Coollection extends TightencoCollection
         return $this->runViaLaravelCollection(function () use ($items) {
             return parent::diffAssoc($items);
         });
+    }
+
+    /**
+     * Overwrite the original array with the
+     *
+     * @param $overwrite
+     * @return Coollection
+     */
+    function overwrite($overwrite)
+    {
+        $this->__items = array_replace_recursive($this->__items, $this->getArrayableItems($overwrite));
+
+        return $this;
     }
 }

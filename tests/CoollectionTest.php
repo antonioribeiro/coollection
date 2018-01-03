@@ -1038,6 +1038,60 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($a, (new Coollection(new Coollection($a)))->toArray());
     }
 
+    public function testOverwrite()
+    {
+        $a = [
+            'a' => 2,
+            'b' => 3,
+            'c' => [
+                'd' => 4,
+            ],
+            'e' => [
+                'f' => [
+                    'g' => 5,
+                ],
+            ],
+        ];
+
+        $b = [
+            'c' => [
+                'd' => 6,
+                'h' => 7,
+                'i' => [
+                    'j' => 8,
+                ],
+            ],
+            'e' => [
+                'f' => [
+                    'g' => [
+                        'k' => 9
+                    ],
+                ],
+            ],
+        ];
+
+        $c = [
+            'a' => 2,
+            'b' => 3,
+            'c' => [
+                'd' => 6,
+                'h' => 7,
+                'i' => [
+                    'j' => 8,
+                ],
+            ],
+            'e' => [
+                'f' => [
+                    'g' => [
+                        'k' => 9
+                    ],
+                ],
+            ],
+        ];
+
+        $this->assertEquals($c, coollect($a)->overwrite($b)->toArray());
+    }
+
     // public function map(callable $callback) TODO
     // public function mapSpread(callable $callback) TODO
     // public function mapToDictionary(callable $callback) TODO
