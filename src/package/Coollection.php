@@ -728,7 +728,7 @@ class Coollection extends TightencoCollection
      *
      * @return Coollection
      */
-    function sortByKey()
+    public function sortByKey()
     {
         $items = $this->__items;
 
@@ -742,7 +742,7 @@ class Coollection extends TightencoCollection
      *
      * @return Coollection
      */
-    function sortByKeysRecursive()
+    public function sortByKeysRecursive()
     {
         $items = $this->__items;
 
