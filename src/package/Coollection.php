@@ -3,6 +3,7 @@
 namespace PragmaRX\Coollection\Package;
 
 use Exception;
+use PragmaRX\Coollection\Package\Support\Str;
 use Traversable;
 use JsonSerializable;
 use Illuminate\Support\HigherOrderCollectionProxy;
@@ -184,11 +185,11 @@ class Coollection extends TightencoCollection
      */
     public function each(callable $callback)
     {
-        return $this->__wrap(
-            parent::each(
+        return $this->runViaLaravelCollection(function () use ($callback) {
+            return parent::each(
                 $this->coollectizeCallback($callback)
-            )
-        );
+            );
+        });
     }
 
     /**
@@ -248,12 +249,21 @@ class Coollection extends TightencoCollection
         }
 
         $value = $this->keys()->mapWithKeys(function ($item) {
-            return [snake($item) => $item];
-        })->get($key);
+            return [$this->snake($item) => $item];
+        })->get(lower($key));
 
         return is_null($value)
             ? static::NOT_FOUND
             : $value;
+    }
+
+    public function snake($string)
+    {
+        if (ctype_upper($string)) {
+            return lower($string);
+        }
+
+        return Str::snake($string);
     }
 
     /**
@@ -273,6 +283,20 @@ class Coollection extends TightencoCollection
         }
 
         return static::NOT_FOUND;
+    }
+
+    /**
+     * Group an associative array by a field or using a callback.
+     *
+     * @param  callable|string  $groupBy
+     * @param  bool  $preserveKeys
+     * @return static
+     */
+    public function groupBy($groupBy, $preserveKeys = false)
+    {
+        return $this->runViaLaravelCollection(function () use ($groupBy, $preserveKeys) {
+            return parent::groupBy($groupBy, $preserveKeys);
+        });
     }
 
     /**
@@ -697,5 +721,33 @@ class Coollection extends TightencoCollection
         $this->__items = array_replace_recursive($this->__items, $this->getArrayableItems($overwrite));
 
         return $this;
+    }
+
+    /**
+     * Sort by key.
+     *
+     * @return Coollection
+     */
+    function sortByKey()
+    {
+        $items = $this->__items;
+
+        ksort($items);
+
+        return $this->__wrap($items);
+    }
+
+    /**
+     * Sort by key.
+     *
+     * @return Coollection
+     */
+    function sortByKeysRecursive()
+    {
+        $items = $this->__items;
+
+        array_sort_by_keys_recursive($items);
+
+        return $this->__wrap($items);
     }
 }
