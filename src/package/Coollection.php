@@ -716,7 +716,7 @@ class Coollection extends TightencoCollection
      * @param $overwrite
      * @return Coollection
      */
-    function overwrite($overwrite)
+    public function overwrite($overwrite)
     {
         $this->__items = array_replace_recursive($this->__items, $this->getArrayableItems($overwrite));
 
