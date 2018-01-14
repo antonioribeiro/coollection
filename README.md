@@ -133,6 +133,13 @@ echo $c->flip()->barak_obama == 'first_name'
 // true
 ```
 
+One word keys are case insensitive:
+
+``` php
+echo $c->rio;
+echo $c->RIO;
+```
+
 ## Change log
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
