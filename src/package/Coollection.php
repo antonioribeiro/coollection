@@ -216,12 +216,12 @@ class Coollection extends TightencoCollection
      */
     public function first(callable $callback = null, $default = null)
     {
-        return $this->__wrap(
-            parent::first(
+        return $this->runViaLaravelCollection(function () use ($callback, $default) {
+            return parent::first(
                 $this->coollectizeCallback($callback),
                 $default
-            )
-        );
+            );
+        });
     }
 
     /**
