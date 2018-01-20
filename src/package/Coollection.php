@@ -519,7 +519,9 @@ class Coollection extends TightencoCollection
      */
     public function last(callable $callback = null, $default = null)
     {
-        return $this->__wrap(parent::last($callback, $default));
+        return $this->runViaLaravelCollection(function () use ($callback, $default) {
+            return parent::last($callback, $default);
+        });
     }
 
     /**
@@ -532,7 +534,9 @@ class Coollection extends TightencoCollection
      */
     public function random($number = null)
     {
-        return $this->__wrap(parent::random($number));
+        return $this->runViaLaravelCollection(function () use ($number) {
+            return parent::random($number);
+        });
     }
 
     /**
@@ -543,7 +547,9 @@ class Coollection extends TightencoCollection
      */
     public function mode($key = null)
     {
-        return $this->__wrap(parent::mode($key));
+        return $this->runViaLaravelCollection(function () use ($key) {
+            return parent::mode($key);
+        });
     }
 
     /**
