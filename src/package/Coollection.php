@@ -4,6 +4,7 @@ namespace PragmaRX\Coollection\Package;
 
 use Exception;
 use PragmaRX\Coollection\Package\Support\Str;
+use Tightenco\Collect\Support\Arr;
 use Traversable;
 use JsonSerializable;
 use Illuminate\Support\HigherOrderCollectionProxy;
@@ -233,7 +234,13 @@ class Coollection extends TightencoCollection
      */
     public function get($key, $default = null)
     {
-        return $this->__wrap(parent::get($key, $default));
+        return $this->runViaLaravelCollection(function () use ($key, $default) {
+            if (($value = parent::get($key, $notFound = '!#__NOT_FOUND__#!')) === $notFound) {
+                $value = Arr::get($this->items, $key, $default);
+            }
+
+            return $value;
+        });
     }
 
     /**

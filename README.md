@@ -78,6 +78,12 @@ Instead of:
 $input->get('pagination')['perPage']
 ```
 
+You can also use "dot notation" to get your items:
+
+``` php
+$input->get('pagination.perPage')
+```
+
 ## PHP Agnostic
 
 This is an agnostic PHP package, which uses an extracted version of Laravel's Illuminate Collection, it's actually [tightenco/collect](https://github.com/tightenco/collect), modified to access collection items as properties.

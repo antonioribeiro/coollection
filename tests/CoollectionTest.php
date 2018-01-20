@@ -1103,6 +1103,21 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('R$', $currency->BR->symbol);
     }
 
+    /**
+     * Different from Laravel
+     */
+    public function testCanGetDottedProperties()
+    {
+        $currency = coollect([
+            'BR' => [ 'symbol' => 'R$' ]
+        ]);
+
+        $this->assertEquals('R$', $currency->br->symbol);
+
+        $this->assertEquals('R$', $currency->get('BR.symbol'));
+    }
+
+
     // public function map(callable $callback) TODO
     // public function mapSpread(callable $callback) TODO
     // public function mapToDictionary(callable $callback) TODO
