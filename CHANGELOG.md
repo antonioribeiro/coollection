@@ -4,6 +4,12 @@ All notable changes to `coollection` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## v0.3.0 - 2018-01-21
+### Changed
+gUpgrade script is now using Illuminate\Support\Collection directly.
+### Added
+More tests
+
 ## v0.1.9 - 2018-01-14
 ### Changed
 Allow properties to be retrieved as lower or upper case
