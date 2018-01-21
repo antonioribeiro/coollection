@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Coollection\Package;
 
-use Closure;
 use Exception;
 use IlluminateExtracted\Support\Str;
 use IlluminateExtracted\Support\Arr;
@@ -11,9 +10,9 @@ use JsonSerializable;
 use Illuminate\Support\HigherOrderCollectionProxy;
 use IlluminateExtracted\Contracts\Support\Arrayable;
 use IlluminateExtracted\Contracts\Support\Jsonable;
-use IlluminateExtracted\Support\Collection as TightencoCollection;
+use IlluminateExtracted\Support\Collection as IlluminateCollection;
 
-class Coollection extends TightencoCollection
+class Coollection extends IlluminateCollection
 {
     /**
      * Consants
@@ -353,6 +352,7 @@ class Coollection extends TightencoCollection
 
     /**
      * Execute a closure via Laravel's Collection
+     *
      * @param $param
      * @return Coollection|array
      */
