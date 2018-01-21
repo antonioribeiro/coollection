@@ -16,7 +16,7 @@ checks:
 
 filter:
      paths: [src/*]
-     excluded_paths: ["tests/*", "update/*"]
+     excluded_paths: ["tests/*", "src/package/Support/IlluminateExtracted/*"]
 
 coding_style:
      php: {  }
