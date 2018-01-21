@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Coollection\Package;
 
+use Closure;
 use Exception;
 use PragmaRX\Coollection\Package\Support\Str;
 use Tightenco\Collect\Support\Arr;
@@ -235,7 +236,7 @@ class Coollection extends TightencoCollection
     public function get($key, $default = null)
     {
         return $this->runViaLaravelCollection(function () use ($key, $default) {
-            if (($value = parent::get($key, $notFound = '!#__NOT_FOUND__#!')) === $notFound) {
+            if (($value = parent::get($key, static::NOT_FOUND)) === static::NOT_FOUND) {
                 $value = Arr::get($this->items, $key, $default);
             }
 
