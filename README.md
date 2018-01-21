@@ -7,7 +7,9 @@
 <!-- [![Total Downloads][ico-downloads]][link-downloads] -->
 <!-- [![Quality Score][ico-code-quality]][link-code-quality] -->
 
-#### Access collection items as object properties
+#### Access collection items as objects properties
+
+Coollection is [Laravel's Illuminate\Collection](https://laravel.com/docs/5.5/collections) repackaged to be used as all properties were objects: 
 
 ``` php
 $collection->name
@@ -86,7 +88,17 @@ $input->get('pagination.perPage')
 
 ## PHP Agnostic
 
-This is an agnostic PHP package, which uses an extracted version of Laravel's Illuminate Collection, it's actually [tightenco/collect](https://github.com/tightenco/collect), modified to access collection items as properties.
+This is an agnostic PHP package, an extraction of Illuminate\Support\Collection with all needed classes, interfaces and traits. For that if you wish just to use Illuminate's Collection, you just have to import the class Collection:
+
+``` php
+$collection = new IlluminateExtracted\Support\Collection(['my collection']); 
+```
+
+or use the usual helper:
+
+``` php
+$collection = collect(['my collection']); 
+```
 
 ## Documentation
 
@@ -101,10 +113,6 @@ $this->sendThanks(
 
 $countries->where('name.common', 'United States')->first()->currency->symbol;
 ```
-
-## Changes to [tightenco/collect](https://github.com/tightenco/collect)
-
-As it is still using [Illuminate's namespace](https://github.com/tightenco/collect/pull/56), which will conflict with **Illuminate\Support\Collection**, for those who need to use it in a Laravel project, this package has an [updater script](upgrade-collect.sh) which downloads tightenco/collect sources and change the namespace to [**Tightenco\Collect**](https://github.com/antonioribeiro/coolection/blob/master/src/vendor/tightenco/collect/src/Tightenco/Collect/Support/Collection.php).  
 
 ## Install
 
