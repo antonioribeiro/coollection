@@ -1122,7 +1122,6 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testHelpers()
     {
-
         $this->assertEquals('laravel_framework', with('laravel_framework'));
 
         $this->assertEquals('laravel_framework', snake('LaravelFramework'));
