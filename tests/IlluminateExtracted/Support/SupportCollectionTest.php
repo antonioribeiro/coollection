@@ -1,6 +1,6 @@
 <?php
 
-namespace Tightenco\Collect\Tests\Support;
+namespace IlluminateExtracted\Tests\Support;
 
 use stdClass;
 use ArrayAccess;
@@ -8,9 +8,9 @@ use Mockery as m;
 use ReflectionClass;
 use JsonSerializable;
 use PHPUnit\Framework\TestCase;
-use Tightenco\Collect\Support\Collection;
-use Tightenco\Collect\Contracts\Support\Jsonable;
-use Tightenco\Collect\Contracts\Support\Arrayable;
+use IlluminateExtracted\Support\Collection;
+use IlluminateExtracted\Contracts\Support\Jsonable;
+use IlluminateExtracted\Contracts\Support\Arrayable;
 
 class SupportCollectionTest extends TestCase
 {
@@ -173,9 +173,9 @@ class SupportCollectionTest extends TestCase
 
     public function testToArrayCallsToArrayOnEachItemInCollection()
     {
-        $item1 = m::mock('Tightenco\Collect\Contracts\Support\Arrayable');
+        $item1 = m::mock('IlluminateExtracted\Contracts\Support\Arrayable');
         $item1->shouldReceive('toArray')->once()->andReturn('foo.array');
-        $item2 = m::mock('Tightenco\Collect\Contracts\Support\Arrayable');
+        $item2 = m::mock('IlluminateExtracted\Contracts\Support\Arrayable');
         $item2->shouldReceive('toArray')->once()->andReturn('bar.array');
         $c = new Collection([$item1, $item2]);
         $results = $c->toArray();
@@ -187,7 +187,7 @@ class SupportCollectionTest extends TestCase
     {
         $item1 = m::mock('JsonSerializable');
         $item1->shouldReceive('jsonSerialize')->once()->andReturn('foo.json');
-        $item2 = m::mock('Tightenco\Collect\Contracts\Support\Arrayable');
+        $item2 = m::mock('IlluminateExtracted\Contracts\Support\Arrayable');
         $item2->shouldReceive('toArray')->once()->andReturn('bar.array');
         $c = new Collection([$item1, $item2]);
         $results = $c->jsonSerialize();
@@ -451,16 +451,16 @@ class SupportCollectionTest extends TestCase
             $c->where('v', '<', null)->values()->all()
         );
 
-        $c = new Collection([['v' => 1], ['v' => new \Tightenco\Collect\Support\HtmlString('hello')]]);
+        $c = new Collection([['v' => 1], ['v' => new \IlluminateExtracted\Support\HtmlString('hello')]]);
         $this->assertEquals(
-            [['v' => new \Tightenco\Collect\Support\HtmlString('hello')]],
+            [['v' => new \IlluminateExtracted\Support\HtmlString('hello')]],
             $c->where('v', 'hello')->values()->all()
         );
 
         $c = new Collection([['v' => 1], ['v' => 'hello']]);
         $this->assertEquals(
             [['v' => 'hello']],
-            $c->where('v', new \Tightenco\Collect\Support\HtmlString('hello'))->values()->all()
+            $c->where('v', new \IlluminateExtracted\Support\HtmlString('hello'))->values()->all()
         );
     }
 
@@ -973,11 +973,9 @@ class SupportCollectionTest extends TestCase
 
         $this->assertEquals(['first' => 'Taylor'], $data->except(['last', 'email', 'missing'])->all());
         $this->assertEquals(['first' => 'Taylor'], $data->except('last', 'email', 'missing')->all());
-        $this->assertEquals(['first' => 'Taylor'], $data->except(collect(['last' => 'Otwell', 'email' => 'taylorotwell@gmail.com', 'missing']))->all());
 
         $this->assertEquals(['first' => 'Taylor', 'email' => 'taylorotwell@gmail.com'], $data->except(['last'])->all());
         $this->assertEquals(['first' => 'Taylor', 'email' => 'taylorotwell@gmail.com'], $data->except('last')->all());
-        $this->assertEquals(['first' => 'Taylor', 'email' => 'taylorotwell@gmail.com'], $data->except(collect(['last' => 'Otwell']))->all());
     }
 
     public function testPluckWithArrayAndObjectValues()
@@ -1601,6 +1599,48 @@ class SupportCollectionTest extends TestCase
         $this->assertEquals($expected_result, $result->toArray());
     }
 
+    public function testGroupByMultiLevelAndClosurePreservingKeys()
+    {
+        $data = new Collection([
+            10 => ['user' => 1, 'skilllevel' => 1, 'roles' => ['Role_1', 'Role_3']],
+            20 => ['user' => 2, 'skilllevel' => 1, 'roles' => ['Role_1', 'Role_2']],
+            30 => ['user' => 3, 'skilllevel' => 2, 'roles' => ['Role_1']],
+            40 => ['user' => 4, 'skilllevel' => 2, 'roles' => ['Role_2']],
+        ]);
+
+        $result = $data->groupBy([
+            'skilllevel',
+            function ($item) {
+                return $item['roles'];
+            },
+        ], true);
+
+        $expected_result = [
+            1 => [
+                'Role_1' => [
+                    10 => ['user' => 1, 'skilllevel' => 1, 'roles' => ['Role_1', 'Role_3']],
+                    20 => ['user' => 2, 'skilllevel' => 1, 'roles' => ['Role_1', 'Role_2']],
+                ],
+                'Role_3' => [
+                    10 => ['user' => 1, 'skilllevel' => 1, 'roles' => ['Role_1', 'Role_3']],
+                ],
+                'Role_2' => [
+                    20 => ['user' => 2, 'skilllevel' => 1, 'roles' => ['Role_1', 'Role_2']],
+                ],
+            ],
+            2 => [
+                'Role_1' => [
+                    30 => ['user' => 3, 'skilllevel' => 2, 'roles' => ['Role_1']],
+                ],
+                'Role_2' => [
+                    40 => ['user' => 4, 'skilllevel' => 2, 'roles' => ['Role_2']],
+                ],
+            ],
+        ];
+
+        $this->assertEquals($expected_result, $result->toArray());
+    }
+
     public function testKeyByAttribute()
     {
         $data = new Collection([['rating' => 1, 'name' => '1'], ['rating' => 2, 'name' => '2'], ['rating' => 3, 'name' => '3']]);
@@ -1928,9 +1968,11 @@ class SupportCollectionTest extends TestCase
         $this->assertEquals($data->all(), $data->only(null)->all());
         $this->assertEquals(['first' => 'Taylor'], $data->only(['first', 'missing'])->all());
         $this->assertEquals(['first' => 'Taylor'], $data->only('first', 'missing')->all());
+        $this->assertEquals(['first' => 'Taylor'], $data->only(collect(['first', 'missing']))->all());
 
         $this->assertEquals(['first' => 'Taylor', 'email' => 'taylorotwell@gmail.com'], $data->only(['first', 'email'])->all());
         $this->assertEquals(['first' => 'Taylor', 'email' => 'taylorotwell@gmail.com'], $data->only('first', 'email')->all());
+        $this->assertEquals(['first' => 'Taylor', 'email' => 'taylorotwell@gmail.com'], $data->only(collect(['first', 'email']))->all());
     }
 
     public function testGettingAvgItemsFromCollection()
@@ -2421,6 +2463,12 @@ class SupportCollectionTest extends TestCase
         });
 
         $this->assertSame(['michael', 'tom', 'taylor'], $collection->toArray());
+    }
+
+    public function testGetWithNullReturnsNull()
+    {
+        $collection = new Collection([1, 2, 3]);
+        $this->assertNull($collection->get(null));
     }
 }
 

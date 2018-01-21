@@ -5,13 +5,13 @@ namespace PragmaRX\Coollection\Package;
 use Closure;
 use Exception;
 use PragmaRX\Coollection\Package\Support\Str;
-use Tightenco\Collect\Support\Arr;
+use IlluminateExtracted\Support\Arr;
 use Traversable;
 use JsonSerializable;
 use Illuminate\Support\HigherOrderCollectionProxy;
-use Tightenco\Collect\Contracts\Support\Arrayable;
-use Tightenco\Collect\Contracts\Support\Jsonable;
-use Tightenco\Collect\Support\Collection as TightencoCollection;
+use IlluminateExtracted\Contracts\Support\Arrayable;
+use IlluminateExtracted\Contracts\Support\Jsonable;
+use IlluminateExtracted\Support\Collection as TightencoCollection;
 
 class Coollection extends TightencoCollection
 {

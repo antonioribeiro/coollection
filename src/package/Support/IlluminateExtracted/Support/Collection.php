@@ -1,6 +1,6 @@
 <?php
 
-namespace Tightenco\Collect\Support;
+namespace IlluminateExtracted\Support;
 
 use stdClass;
 use Countable;
@@ -11,10 +11,10 @@ use ArrayIterator;
 use CachingIterator;
 use JsonSerializable;
 use IteratorAggregate;
-use Tightenco\Collect\Support\Debug\Dumper;
-use Tightenco\Collect\Support\Traits\Macroable;
-use Tightenco\Collect\Contracts\Support\Jsonable;
-use Tightenco\Collect\Contracts\Support\Arrayable;
+use IlluminateExtracted\Support\Debug\Dumper;
+use IlluminateExtracted\Support\Traits\Macroable;
+use IlluminateExtracted\Contracts\Support\Jsonable;
+use IlluminateExtracted\Contracts\Support\Arrayable;
 
 class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate, Jsonable, JsonSerializable
 {
@@ -271,6 +271,8 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
      */
     public function dd(...$args)
     {
+        http_response_code(500);
+
         call_user_func_array([$this, 'dump'], $args);
 
         die(1);
@@ -385,13 +387,13 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
     /**
      * Get all items except for those with the specified keys.
      *
-     * @param  \Tightenco\Collect\Support\Collection|mixed  $keys
+     * @param  \IlluminateExtracted\Support\Collection|mixed  $keys
      * @return static
      */
     public function except($keys)
     {
         if ($keys instanceof self) {
-            $keys = $keys->keys()->all();
+            $keys = $keys->all();
         } elseif (! is_array($keys)) {
             $keys = func_get_args();
         }
@@ -658,6 +660,12 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
      */
     public function groupBy($groupBy, $preserveKeys = false)
     {
+        if (is_array($groupBy)) {
+            $nextGroups = $groupBy;
+
+            $groupBy = array_shift($nextGroups);
+        }
+
         $groupBy = $this->valueRetriever($groupBy);
 
         $results = [];
@@ -680,7 +688,13 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
             }
         }
 
-        return new static($results);
+        $result = new static($results);
+
+        if (! empty($nextGroups)) {
+            return $result->map->groupBy($nextGroups, $preserveKeys);
+        }
+
+        return $result;
     }
 
     /**
@@ -1050,6 +1064,10 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
     {
         if (is_null($keys)) {
             return new static($this->items);
+        }
+
+        if ($keys instanceof self) {
+            $keys = $keys->all();
         }
 
         $keys = is_array($keys) ? $keys : func_get_args();
@@ -1659,7 +1677,7 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
     /**
      * Get a base Support collection instance from this collection.
      *
-     * @return \Tightenco\Collect\Support\Collection
+     * @return \IlluminateExtracted\Support\Collection
      */
     public function toBase()
     {

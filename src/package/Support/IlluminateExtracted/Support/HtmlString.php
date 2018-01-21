@@ -1,8 +1,8 @@
 <?php
 
-namespace Tightenco\Collect\Support;
+namespace IlluminateExtracted\Support;
 
-use Tightenco\Collect\Contracts\Support\Htmlable;
+use IlluminateExtracted\Contracts\Support\Htmlable;
 
 class HtmlString implements Htmlable
 {

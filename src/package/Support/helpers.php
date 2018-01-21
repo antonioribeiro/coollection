@@ -20,7 +20,6 @@ if (! function_exists('coollect')) {
     }
 }
 
-
 if (! function_exists('snake')) {
     /**
      * Convert a string to snake case.

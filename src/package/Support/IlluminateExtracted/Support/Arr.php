@@ -1,10 +1,10 @@
 <?php
 
-namespace Tightenco\Collect\Support;
+namespace IlluminateExtracted\Support;
 
 use ArrayAccess;
 use InvalidArgumentException;
-use Tightenco\Collect\Support\Traits\Macroable;
+use IlluminateExtracted\Support\Traits\Macroable;
 
 class Arr
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tightenco\Collect\Support\Debug;
+namespace IlluminateExtracted\Support\Debug;
 
 use Symfony\Component\VarDumper\Dumper\HtmlDumper as SymfonyHtmlDumper;
 

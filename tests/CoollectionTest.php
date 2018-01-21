@@ -4,7 +4,7 @@ namespace PragmaRX\Coollection\Tests;
 
 use PragmaRX\Coollection\Package\Coollection;
 use PragmaRX\Coollection\Tests\Support\Dummy;
-use Tightenco\Collect\Support\Collection as TightencoCollect;
+use IlluminateExtracted\Support\Collection as IlluminateExtractedCollection;
 
 class CoollectionTest extends \PHPUnit\Framework\TestCase
 {
@@ -413,7 +413,7 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             $this->coollection->accounting->keyBy('account_id')->toArray(),
-            (new TightencoCollect($this->coollection->accounting))->keyBy('account_id')->toArray()
+            (new IlluminateExtractedCollection($this->coollection->accounting))->keyBy('account_id')->toArray()
         );
 
         $this->assertInstanceOf(Coollection::class, $this->coollection->accounting->keyBy('account_id'));

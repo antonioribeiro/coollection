@@ -26,7 +26,8 @@
 
     "require": {
         "php" : ">=7.0",
-        "symfony/var-dumper": "~3.3"
+        "symfony/var-dumper": "~3.3",
+        "nesbot/carbon": "~1.20"
     },
 
     "require-dev": {
@@ -39,10 +40,11 @@
         "psr-4": {
             "PragmaRX\\Coollection\\Package\\": "src/package",
             "PragmaRX\\Coollection\\Tests\\": "tests",
-            "Tightenco\\Collect\\": "src/vendor/tightenco/collect/src/Tightenco/Collect",
-            "Tightenco\\Collect\\Tests\\Support\\": "tests"
+            "IlluminateExtracted\\": "src/package/Support/IlluminateExtracted",
+            "IlluminateExtracted\\Tests\\": "tests/IlluminateExtracted"
         },
         "files": [
+            "src/package/Support/helpers.php",
             "src/package/Support/helpers.php"
         ]
     },
