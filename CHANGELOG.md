@@ -1,12 +1,9 @@
 # Changelog
 
-All notable changes to `coollection` will be documented in this file.
-
-Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
-
 ## v0.3.0 - 2018-01-21
 ### Changed
-gUpgrade script is now using Illuminate\Support\Collection directly.
+Upgrade script is now using Illuminate\Support\Collection directly.
+Tagging versions using the current Laravel version number.
 ### Added
 More tests
 
