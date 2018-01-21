@@ -45,7 +45,7 @@
         },
         "files": [
             "src/package/Support/helpers.php",
-            "src/package/Support/helpers.php"
+            "src/package/Support/IlluminateExtracted/Support/helpers.php"
         ]
     },
 

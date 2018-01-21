@@ -10,33 +10,33 @@ shopt -s dotglob
  #
 function main()
 {
-#    showAppTitle
-#
-#    prepareEnvironment
-#
-#    displayVariables
-#
-#    cleanDirectories
-#
-#    downloadRepository
-#
-#    extractZip
-#
-#    copyClasses
-#
-#    copyContracts
-#
-#    copyTraits
-#
-#    copyStubs
+    showAppTitle
 
-#    downloadTests
-#
-#    renameNamespace
-#
-#    fillAliases
-#
-#    removeDownloadedRepositoryDir
+    prepareEnvironment
+
+    displayVariables
+
+    cleanDirectories
+
+    downloadRepository
+
+    extractZip
+
+    copyClasses
+
+    copyContracts
+
+    copyTraits
+
+    copyStubs
+
+    downloadTests
+
+    renameNamespace
+
+    fillAliases
+
+    removeDownloadedRepositoryDir
 
     runTests
 }

@@ -20,7 +20,6 @@ before_script:
 
 script:
   - bash upgrade.sh
-  - vendor/bin/phpunit --coverage-clover=coverage.clover
 
 after_script:
   - |

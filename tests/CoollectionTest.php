@@ -1117,6 +1117,52 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('R$', $currency->get('BR.symbol'));
     }
 
+    /**
+     * Different from Laravel
+     */
+    public function testHelpers()
+    {
+
+        $this->assertEquals('laravel_framework', with('laravel_framework'));
+
+        $this->assertEquals('laravel_framework', snake('LaravelFramework'));
+
+        $this->assertEquals('LARAVEL FRAMEWORK É A MELHOR', upper('laravel framework é a melhor'));
+
+        $this->assertEquals('laravel framework é a melhor', lower('LARAVEL FRAMEWORK É A MELHOR'));
+
+        $this->assertEquals(true, starts_with('laravel framework', 'l'));
+
+        $this->assertEquals(false, starts_with('Laravel framework', 'l'));
+
+        $c = (new Coollection($array = ['laravel framework']));
+
+        $this->assertEquals($c->first(), coollect($c->toArray())->first());
+
+        $this->assertEquals($c->first(), coollect($c)->first());
+    }
+
+    public function testMacro()
+    {
+        Coollection::macro('testMacro', function ($collection) {
+            return 'macro is working';
+        });
+
+        $this->assertEquals('macro is working', Coollection::testMacro('is it?'));
+        $this->assertEquals('macro is working', collect()->testMacro('is it?'));
+
+        Coollection::macro('testMacroLower', 'lower');
+
+        $this->assertEquals('macro is lower', Coollection::testMacroLower('MACRO IS LOWER'));
+        $this->assertEquals('macro is lower', collect()->testMacroLower('MACRO IS LOWER'));
+    }
+
+    public function testCollectionExcept()
+    {
+        $this->assertSame(['a', 'c'], collect(['a', 'b', 'c'])->except(1)->values()->toArray());
+
+        $this->assertSame(['a', 'c'], collect(['a', 'b', 'c'])->except(collect([1]))->values()->toArray());
+    }
 
     // public function map(callable $callback) TODO
     // public function mapSpread(callable $callback) TODO

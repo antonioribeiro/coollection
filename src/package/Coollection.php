@@ -4,7 +4,7 @@ namespace PragmaRX\Coollection\Package;
 
 use Closure;
 use Exception;
-use PragmaRX\Coollection\Package\Support\Str;
+use IlluminateExtracted\Support\Str;
 use IlluminateExtracted\Support\Arr;
 use Traversable;
 use JsonSerializable;
