@@ -354,7 +354,7 @@ class Coollection extends IlluminateCollection
      * Execute a closure via Laravel's Collection
      *
      * @param $param
-     * @return Coollection|array
+     * @return mixed
      */
     private function runViaLaravelCollection($param)
     {
@@ -721,6 +721,30 @@ class Coollection extends IlluminateCollection
     {
         return $this->runViaLaravelCollection(function () use ($items) {
             return parent::diffAssoc($items);
+        });
+    }
+
+    /**
+     * Determine if the collection is empty or not.
+     *
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return $this->runViaLaravelCollection(function () {
+            return parent::isEmpty();
+        });
+    }
+
+    /**
+     * Count the number of items in the collection.
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return $this->runViaLaravelCollection(function () {
+            return parent::count();
         });
     }
 
