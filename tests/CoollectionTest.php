@@ -1163,6 +1163,20 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['a', 'c'], collect(['a', 'b', 'c'])->except(collect([1]))->values()->toArray());
     }
 
+    public function testIsEmpty()
+    {
+        $this->assertFalse(coollect([1,2,3,4])->isEmpty());
+
+        $this->assertTrue(coollect([])->isEmpty());
+    }
+
+    public function testIsCount()
+    {
+        $this->assertEquals(4, coollect([1,2,3,4])->count());
+
+        $this->assertEquals(0, coollect([])->count());
+    }
+
     // public function map(callable $callback) TODO
     // public function mapSpread(callable $callback) TODO
     // public function mapToDictionary(callable $callback) TODO
