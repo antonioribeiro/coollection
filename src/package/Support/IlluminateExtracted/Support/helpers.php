@@ -1,9 +1,9 @@
 <?php
 
+use IlluminateExtracted\Support\Str;
 use IlluminateExtracted\Support\Arr;
 use IlluminateExtracted\Support\Collection;
 use IlluminateExtracted\Support\Debug\Dumper;
-use IlluminateExtracted\Support\Str;
 
 if (! function_exists('array_wrap')) {
     /**
