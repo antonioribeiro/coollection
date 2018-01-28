@@ -498,7 +498,10 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testPluck()
     {
-        $this->testIntersect();
+        $this->assertEquals(
+            ["Chair", "Bookcase", "Desk"],
+            $this->coollection->accounting->pluck('product')->toArray()
+        );
     }
 
     public function testMap()
