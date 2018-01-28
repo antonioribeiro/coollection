@@ -24,7 +24,7 @@ if (! function_exists('collect')) {
      * Create a collection from the given value.
      *
      * @param  mixed  $value
-     * @return \IlluminateExtracted\Support\Collection|Illuminate\Support\Collection
+     * @return \IlluminateExtracted\Support\Collection|\Illuminate\Support\Collection
      */
     function collect($value = null)
     {

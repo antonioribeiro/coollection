@@ -57,6 +57,8 @@ function prepareEnvironment()
     project=framework
     oldNamespace='Illuminate'
     newNamespace='IlluminateExtracted'
+    oldVanillaNamespace='Vanilla'
+    newVanillaNamespace='Illuminate'
     repository=https://github.com/$vendor/$project.git
 
     getCurrentVersionFromGitHub
@@ -307,6 +309,9 @@ function renameNamespace()
 
     find ${newNamespaceDir} -name "*.php" -exec sed -i "" -e "s|${oldNamespace}|${newNamespace}|g" {} \;
     find ${testsDir} -name "*.php" -exec sed -i "" -e "s|${oldNamespace}|${newNamespace}|g" {} \;
+
+    find ${newNamespaceDir} -name "*.php" -exec sed -i "" -e "s|${oldVanillaNamespace}|${newVanillaNamespace}|g" {} \;
+    find ${testsDir} -name "*.php" -exec sed -i "" -e "s|${oldVanillaNamespace}|${newVanillaNamespace}|g" {} \;
 }
 
 ##

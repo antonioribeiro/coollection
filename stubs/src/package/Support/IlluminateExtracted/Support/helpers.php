@@ -4,6 +4,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Debug\Dumper;
+use Vanilla\Support\Collection as VanillaCollection;
 
 if (! function_exists('array_wrap')) {
     /**
@@ -23,10 +24,14 @@ if (! function_exists('collect')) {
      * Create a collection from the given value.
      *
      * @param  mixed  $value
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection|\Vanilla\Support\Collection
      */
     function collect($value = null)
     {
+        if (class_exists(VanillaCollection::class)) {
+            return new VanillaCollection($value);
+        }
+
         return new Collection($value);
     }
 }
