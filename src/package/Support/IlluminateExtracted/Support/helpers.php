@@ -1,8 +1,10 @@
 <?php
 
+use IlluminateExtracted\Support\Str;
 use IlluminateExtracted\Support\Arr;
 use IlluminateExtracted\Support\Collection;
 use IlluminateExtracted\Support\Debug\Dumper;
+use Illuminate\Support\Collection as IlluminateCollection;
 
 if (! function_exists('array_wrap')) {
     /**
@@ -22,10 +24,14 @@ if (! function_exists('collect')) {
      * Create a collection from the given value.
      *
      * @param  mixed  $value
-     * @return \IlluminateExtracted\Support\Collection
+     * @return \IlluminateExtracted\Support\Collection|Illuminate\Support\Collection
      */
     function collect($value = null)
     {
+        if (class_exists(IlluminateCollection::class)) {
+            return new IlluminateCollection($value);
+        }
+
         return new Collection($value);
     }
 }
@@ -112,5 +118,18 @@ if (! function_exists('dd')) {
             (new Dumper)->dump($x);
         }
         die(1);
+    }
+}
+
+if (! function_exists('studly_case')) {
+    /**
+     * Convert a value to studly caps case.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    function studly_case($value)
+    {
+        return Str::studly($value);
     }
 }

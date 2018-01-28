@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Debug\Dumper;
@@ -112,5 +113,18 @@ if (! function_exists('dd')) {
             (new Dumper)->dump($x);
         }
         die(1);
+    }
+}
+
+if (! function_exists('studly_case')) {
+    /**
+     * Convert a value to studly caps case.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    function studly_case($value)
+    {
+        return Str::studly($value);
     }
 }
