@@ -788,4 +788,18 @@ class Coollection extends IlluminateCollection
 
         return $this->__wrap($items);
     }
+
+    /**
+     * Get the values of a given key.
+     *
+     * @param  string|array  $value
+     * @param  string|null  $key
+     * @return static
+     */
+    public function pluck($value, $key = null)
+    {
+        return $this->runViaLaravelCollection(function () use ($value, $key) {
+            return parent::pluck($value, $key);
+        });
+    }
 }
