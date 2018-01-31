@@ -1,11 +1,18 @@
 # Coollection
 
-[![Latest Version on Packagist][ico-version]][link-packagist]
-[![Software License][ico-license]](LICENSE.md)
-[![Build Status][ico-travis]][link-travis]
-[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
-<!-- [![Total Downloads][ico-downloads]][link-downloads] -->
-<!-- [![Quality Score][ico-code-quality]][link-code-quality] -->
+<p align="center">
+    <a href="https://packagist.org/packages/pragmarx/coollection"><img alt="Latest Stable Version" src="https://img.shields.io/packagist/v/pragmarx/coollection.svg?style=flat-square"></a>
+    <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
+    <a href="https://scrutinizer-ci.com/g/antonioribeiro/coollection/?branch=master"><img alt="Code Quality" src="https://img.shields.io/scrutinizer/g/antonioribeiro/coollection.svg?style=flat-square"></a>
+    <a href="https://travis-ci.org/antonioribeiro/coollection"><img alt="Build" src="https://img.shields.io/travis/antonioribeiro/coollection.svg?style=flat-square"></a>
+    <a href="https://packagist.org/packages/pragmarx/coollection"><img alt="Downloads" src="https://img.shields.io/packagist/dt/pragmarx/coollection.svg?style=flat-square"></a>
+</p>
+<p align="center">
+    <a href="https://scrutinizer-ci.com/g/antonioribeiro/coollection/?branch=master"><img alt="Coverage" src="https://img.shields.io/scrutinizer/coverage/g/antonioribeiro/coollection.svg?style=flat-square"></a>
+    <a href="https://styleci.io/repos/108602178"><img alt="StyleCI" src="https://styleci.io/repos/108602178/shield"></a>
+    <!-- <a href="https://insight.sensiolabs.com/projects/156fbef1-b03f-4fca-ba97-57874b7a35bf"><img alt="SensioLabsInsight" src="https://img.shields.io/sensiolabs/i/156fbef1-b03f-4fca-ba97-57874b7a35bf.svg?style=flat-square"></a> -->
+    <a href="https://travis-ci.org/antonioribeiro/coollection"><img alt="PHP" src="https://img.shields.io/badge/PHP-7.0%20--%207.2-brightgreen.svg?style=flat-square"></a>
+</p>
 
 #### Access collection items as objects properties
 
@@ -179,23 +186,3 @@ If you discover any security related issues, please email acr@antoniocarlosribei
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-[ico-version]: https://img.shields.io/packagist/v/pragmarx/coollection.svg?style=flat-square
-[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-
-[ico-travis-waiting]: https://img.shields.io/travis/antonioribeiro/coollection/master.svg?style=flat-square
-[ico-travis]: https://img.shields.io/badge/build-passing-green.svg?style=flat-square
-
-[ico-scrutinizer-waiting]: https://img.shields.io/scrutinizer/coverage/g/antonioribeiro/coollection.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/badge/coverage-92%20%25-green.svg?style=flat-square
-
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/antonioribeiro/coollection.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/pragmarx/coollection.svg?style=flat-square
-
-[link-packagist]: https://packagist.org/packages/pragmarx/coollection
-[link-travis]: https://travis-ci.org/antonioribeiro/coollection
-[link-scrutinizer]: https://scrutinizer-ci.com/g/antonioribeiro/coollection/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/antonioribeiro/coollection
-[link-downloads]: https://packagist.org/packages/pragmarx/coollection
-[link-author]: https://github.com/antonioribeiro
-[link-contributors]: ../../contributors
