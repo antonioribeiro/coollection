@@ -10,11 +10,11 @@ use JsonSerializable;
 use IteratorAggregate;
 use IlluminateAgnostic\Collection\Support\Str;
 use IlluminateAgnostic\Collection\Support\Arr;
-use IlluminateAgnostic\Collection\Contracts\Support\Arrayable;
-use IlluminateAgnostic\Collection\Contracts\Support\Jsonable;
 use IlluminateAgnostic\Collection\Support\Traits\Macroable;
+use IlluminateAgnostic\Collection\Contracts\Support\Jsonable;
+use IlluminateAgnostic\Collection\Contracts\Support\Arrayable;
 use IlluminateAgnostic\Collection\Support\HigherOrderCollectionProxy;
-use IlluminateAgnostic\Collection\Support\Collection as IlluminateExtractedCollection;
+use IlluminateAgnostic\Collection\Support\Collection as IlluminateAgnosticCollection;
 
 class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregate, Jsonable, JsonSerializable
 {
@@ -297,7 +297,7 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      */
     private function runViaLaravelCollection($closure, $method = null)
     {
-        $collection = new IlluminateExtractedCollection($this->__toArray());
+        $collection = new IlluminateAgnosticCollection($this->__toArray());
 
         $result = $closure($collection);
 
