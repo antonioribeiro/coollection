@@ -426,6 +426,13 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $c->inexistentPropertyOrItem;
     }
 
+    public function testGetNotFound()
+    {
+        $this->assertEquals('Rio de Janeiro', $this->coollection->get('address.city'));
+
+        $this->assertInstanceOf(Coollection::class, $this->coollection->get('address'));
+    }
+
     public function testGetNoExceptionOnNull()
     {
         Coollection::setRaiseExceptionOnNull(false);
