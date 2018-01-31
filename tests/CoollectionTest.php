@@ -1314,13 +1314,6 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['TAYLOR', 'TAYLOR'], $collection->each->uppercase()->map->name->toArray());
     }
 
-    public function testAliases()
-    {
-        require __DIR__.'/../src/package/Support/alias.php';
-
-        $this->assertTrue(!false);
-    }
-
     public function testGetArrayableItems()
     {
         $coollection = new Coollection;
@@ -1356,6 +1349,19 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $items = new \ArrayIterator(['foo' => 'bar']);
         $array = $method->invokeArgs($coollection, [$items]);
         $this->assertSame(['foo' => 'bar'], $array);
+    }
+
+    public function testTraversable()
+    {
+        $c = new Coollection([1,2,3,4]);
+
+        $sum = 0;
+
+        foreach ($c as $value) {
+            $sum += $value;
+        }
+
+        $this->assertEquals(10, $sum);
     }
 
     // public function map(callable $callback) TODO

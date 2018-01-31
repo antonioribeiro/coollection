@@ -3,21 +3,24 @@
 namespace PragmaRX\Coollection\Package;
 
 use Closure;
+use Countable;
 use Exception;
 use ArrayAccess;
-use Traversable;
 use JsonSerializable;
+use IteratorAggregate;
 use IlluminateAgnostic\Collection\Support\Str;
 use IlluminateAgnostic\Collection\Support\Arr;
 use IlluminateAgnostic\Collection\Contracts\Support\Arrayable;
 use IlluminateAgnostic\Collection\Contracts\Support\Jsonable;
-use PragmaRX\Coollection\Package\Support\Traits\Macroable;
+use IlluminateAgnostic\Collection\Support\Traits\Macroable;
 use IlluminateAgnostic\Collection\Support\HigherOrderCollectionProxy;
 use IlluminateAgnostic\Collection\Support\Collection as IlluminateExtractedCollection;
 
-class Coollection implements Arrayable, ArrayAccess
+class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregate, Jsonable, JsonSerializable
 {
-    use Macroable;
+    use Macroable {
+        __call as __callMacro;
+    }
 
     /**
      * Consants
@@ -77,7 +80,7 @@ class Coollection implements Arrayable, ArrayAccess
     public function __call($name, $arguments)
     {
         if (static::hasMacro($name)) {
-            return $this->callMacro($name, $arguments);
+            return $this->__callMacro($name, $arguments);
         }
 
         return $this->call($name, $arguments);
@@ -90,7 +93,7 @@ class Coollection implements Arrayable, ArrayAccess
      * @param $arguments
      * @return mixed|static
      */
-    public function call($name, $arguments)
+    public function call($name, $arguments = [])
     {
         return $this->runViaLaravelCollection(function ($collection) use ($name, $arguments) {
             return call_user_func_array(
@@ -527,5 +530,54 @@ class Coollection implements Arrayable, ArrayAccess
         $this->items = array_replace_recursive($this->items, $this->getArrayableItems($overwrite));
 
         return $this;
+    }
+
+    /**
+     * Convert the object to its JSON representation.
+     *
+     * @param  int $options
+     * @return string
+     */
+    public function toJson($options = 0)
+    {
+        return $this->call('toJson', [$options]);
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        return $this->call('jsonSerialize');
+    }
+
+    /**
+     * Count elements of an object
+     * @link http://php.net/manual/en/countable.count.php
+     * @return int The custom count as an integer.
+     * </p>
+     * <p>
+     * The return value is cast to an integer.
+     * @since 5.1.0
+     */
+    public function count()
+    {
+        return $this->call('count');
+    }
+
+    /**
+     * Retrieve an external iterator
+     * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
+     * @return Traversable An instance of an object implementing <b>Iterator</b> or
+     * <b>Traversable</b>
+     * @since 5.0.0
+     */
+    public function getIterator()
+    {
+        return $this->call('getIterator');
     }
 }
