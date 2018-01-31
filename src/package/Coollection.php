@@ -2,18 +2,23 @@
 
 namespace PragmaRX\Coollection\Package;
 
+use Closure;
 use Exception;
-use IlluminateExtracted\Support\Str;
-use IlluminateExtracted\Support\Arr;
+use ArrayAccess;
 use Traversable;
 use JsonSerializable;
-use Illuminate\Support\HigherOrderCollectionProxy;
-use IlluminateExtracted\Contracts\Support\Arrayable;
-use IlluminateExtracted\Contracts\Support\Jsonable;
-use IlluminateExtracted\Support\Collection as IlluminateCollection;
+use IlluminateAgnostic\Collection\Support\Str;
+use IlluminateAgnostic\Collection\Support\Arr;
+use IlluminateAgnostic\Collection\Contracts\Support\Arrayable;
+use IlluminateAgnostic\Collection\Contracts\Support\Jsonable;
+use PragmaRX\Coollection\Package\Support\Traits\Macroable;
+use IlluminateAgnostic\Collection\Support\HigherOrderCollectionProxy;
+use IlluminateAgnostic\Collection\Support\Collection as IlluminateExtractedCollection;
 
-class Coollection extends IlluminateCollection
+class Coollection implements Arrayable, ArrayAccess
 {
+    use Macroable;
+
     /**
      * Consants
      */
@@ -24,14 +29,7 @@ class Coollection extends IlluminateCollection
      *
      * @var array
      */
-    protected $__items;
-
-    /**
-     * The items contained in the collection.
-     *
-     * @var array
-     */
-    protected $allowItems = false;
+    protected $items;
 
     /**
      * Raise exception on null.
@@ -41,18 +39,102 @@ class Coollection extends IlluminateCollection
     public static $raiseExceptionOnNull = true;
 
     /**
+     * The methods that can be proxied.
+     *
+     * @var array
+     */
+    protected static $proxies = [
+        'average', 'avg', 'contains', 'each', 'every', 'filter', 'first', 'flatMap',
+        'keyBy', 'map', 'partition', 'reject', 'sortBy', 'sortByDesc', 'sum',
+    ];
+
+    /**
+     * The methods that must return array.
+     *
+     * @var array
+     */
+    protected static $returnArray = [
+        'toArray', 'jsonSerialize', 'unwrap',
+    ];
+
+    /**
      * Create a new coollection.
      *
      * @param  mixed  $items
-     * @return void
      */
     public function __construct($items = [])
     {
-        parent::__construct($items);
+        $this->items = $this->getArrayableItems($items);
+    }
 
-        $this->__items = $this->items;
+    /**
+     * Transfer calls to Illuminate\Collection.
+     *
+     * @param $name
+     * @param $arguments
+     * @return mixed|static
+     */
+    public function __call($name, $arguments)
+    {
+        if (static::hasMacro($name)) {
+            return $this->callMacro($name, $arguments);
+        }
 
-        unset($this->items);
+        return $this->call($name, $arguments);
+    }
+
+    /**
+     * Transfer calls to Illuminate\Collection.
+     *
+     * @param $name
+     * @param $arguments
+     * @return mixed|static
+     */
+    public function call($name, $arguments)
+    {
+        return $this->runViaLaravelCollection(function ($collection) use ($name, $arguments) {
+            return call_user_func_array(
+                [$collection, $name],
+                $this->coollectizeCallbacks($this->__toArray($arguments), $name)
+            );
+        }, $name);
+    }
+
+    /**
+     * Get the collection of items as a plain array.
+     *
+     * @param $value
+     * @return Coollection
+     */
+    public function coollectizeItems($value)
+    {
+        $value = is_null($value) ? $this->items : $value;
+
+        if (! $this->isArrayable($value)) {
+            return $value;
+        }
+
+        $result = array_map(function ($value) {
+            if ($this->isArrayable($value)) {
+                return new static($value);
+            }
+
+            return $value;
+        }, $this->getArrayableItems($value));
+
+        return new static($result);
+    }
+
+    /**
+     * Get the collection of items as a plain array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return array_map(function ($value) {
+            return $value instanceof Arrayable ? $value->toArray() : $value;
+        }, $this->items);
     }
 
     /**
@@ -65,14 +147,6 @@ class Coollection extends IlluminateCollection
      */
     public function __get($key)
     {
-        if ($key == 'items') {
-            return $this->__items;
-        }
-
-        if (property_exists($this, $key)) {
-            return $this->{$key};
-        }
-
         if (($value = $this->getByPropertyName($key)) !== static::NOT_FOUND) {
             return $value;
         }
@@ -85,144 +159,32 @@ class Coollection extends IlluminateCollection
             return null;
         }
 
-        return new HigherOrderCollectionProxy(collect($this), $key);
+        return $this->runViaLaravelCollection(function ($collection) use ($key) {
+            return new HigherOrderCollectionProxy($collection, $key);
+        });
     }
 
     /**
-     * Dynamically access collection proxies.
+     * Recursive toArray().
      *
-     * @param  string  $key
-     * @return mixed|static
-     *
-     * @throws \Exception
-     */
-    public function __isset($key)
-    {
-        if ($key == 'items') {
-            $key = '__items';
-        }
-
-        return isset($this->{$key});
-    }
-
-    /**
-     * Dynamically access collection proxies.
-     *
-     * @param  string  $key
-     *
-     * @throws \Exception
-     */
-    public function __set($key, $value)
-    {
-        if ($key == 'items') {
-            $key = $this->allowItems ? 'items' : '__items';
-
-            $this->{$key} = $value;
-
-            return;
-        }
-
-        if (property_exists($this, $key)) {
-            $this->{$key} = $value;
-
-            return;
-        }
-
-        throw new Exception("Property [{$key}] does not exist on this collection instance.");
-    }
-
-    /**
-     * Get all of the items in the collection.
-     *
+     * @param $value
      * @return array
      */
-    public function all()
+    public function __toArray($value = null)
     {
-        return $this->toArray();
-    }
+        $value = is_null($value) ? $this->items : $value;
 
-    /**
-     * Create the items array based on the internal __items.
-     */
-    private function createItems()
-    {
-        $this->allowItems = true;
-
-        $this->items = $this->__toArray();
-    }
-
-    /**
-     * To array.
-     *
-     * @param $items
-     * @return mixed|null
-     */
-    public function __toArray($items = null)
-    {
-        $items = is_null($items) ? $this->__items : $items;
+        if (! $this->isArrayable($value)) {
+            return $value;
+        }
 
         return array_map(function ($value) {
-            return $value instanceof Arrayable ? $value->toArray() : $value;
-        }, $items instanceof Arrayable ? $items->toArray() : $items);
-    }
+            if ($this->isArrayable($value)) {
+                return $this->__toArray($value);
+            }
 
-    /**
-     * Store and drop items.
-     */
-    private function dropItems()
-    {
-        $this->__items = $this->items;
-
-        unset($this->items);
-
-        $this->allowItems = false;
-    }
-
-    /**
-     * Execute a callback over each item.
-     *
-     * @param  callable  $callback
-     * @return $this
-     */
-    public function each(callable $callback)
-    {
-        return $this->runViaLaravelCollection(function () use ($callback) {
-            return parent::each(
-                $this->coollectizeCallback($callback)
-            );
-        });
-    }
-
-    /**
-     * Run a filter over each of the items.
-     *
-     * @param  callable|null  $callback
-     * @return static
-     */
-    public function filter(callable $callback = null)
-    {
-        return $this->runViaLaravelCollection(function () use ($callback) {
-            return parent::filter(
-                $this->coollectizeCallback($callback)
-            );
-        });
-    }
-
-    /**
-     * Take the first item.
-     *
-     * @param callable|null $callback
-     * @param null $default
-     * @return mixed|static
-     */
-    public function first(callable $callback = null, $default = null)
-    {
-        return $this->runViaLaravelCollection(function () use ($callback, $default) {
-            return parent::first(
-                $this->coollectizeCallback($callback),
-                $default
-            );
-        });
+            return $value;
+        }, $this->getArrayableItems($value));
     }
 
     /**
@@ -234,13 +196,34 @@ class Coollection extends IlluminateCollection
      */
     public function get($key, $default = null)
     {
-        return $this->runViaLaravelCollection(function () use ($key, $default) {
-            if (($value = parent::get($key, static::NOT_FOUND)) === static::NOT_FOUND) {
-                $value = Arr::get($this->items, $key, $default);
-            }
+        if (($value = $this->call('get', [$key, static::NOT_FOUND])) === static::NOT_FOUND) {
+            $value = Arr::get($this->items, $key, $default);
+        }
 
-            return $value;
-        });
+        return $value;
+    }
+
+    /**
+     * Results array of items from Collection or Arrayable.
+     *
+     * @param  mixed  $items
+     * @return array
+     */
+    protected function getArrayableItems($items)
+    {
+        if (is_array($items)) {
+            return $items;
+        } elseif ($items instanceof Arrayable) {
+            return $items->toArray();
+        } elseif ($items instanceof Jsonable) {
+            return json_decode($items->toJson(), true);
+        } elseif ($items instanceof JsonSerializable) {
+            return $items->jsonSerialize();
+        } elseif ($items instanceof Traversable) {
+            return iterator_to_array($items);
+        }
+
+        return (array) $items;
     }
 
     /**
@@ -264,6 +247,12 @@ class Coollection extends IlluminateCollection
             : $value;
     }
 
+    /**
+     * Transform string to snake case.
+     *
+     * @param $string
+     * @return string
+     */
     public function snake($string)
     {
         if (ctype_upper($string)) {
@@ -282,155 +271,47 @@ class Coollection extends IlluminateCollection
     private function getByPropertyName($key)
     {
         if (($key = $this->getArrayKey($key)) !== static::NOT_FOUND) {
-            if (is_array($this->__items[$key])) {
-                return $this->__wrap($this->__items[$key]);
+            if (is_array($this->items[$key])) {
+                return $this->__wrap($this->items[$key]);
             }
 
-            return $this->__items[$key];
+            return $this->items[$key];
         }
 
         return static::NOT_FOUND;
     }
 
     /**
-     * Group an associative array by a field or using a callback.
-     *
-     * @param  callable|string  $groupBy
-     * @param  bool  $preserveKeys
-     * @return static
-     */
-    public function groupBy($groupBy, $preserveKeys = false)
-    {
-        return $this->runViaLaravelCollection(function () use ($groupBy, $preserveKeys) {
-            return parent::groupBy($groupBy, $preserveKeys);
-        });
-    }
-
-    /**
-     * Get the keys of the collection items.
-     *
-     * @return static
-     */
-    public function keys()
-    {
-        return $this->runViaLaravelCollection(function () {
-            return parent::keys();
-        });
-    }
-
-    /**
-     * Run a map over each of the items.
-     *
-     * @param  callable  $callback
-     * @return static
-     */
-    public function map(callable $callback)
-    {
-        return $this->runViaLaravelCollection(function () use ($callback) {
-            return parent::map(
-                $this->coollectizeCallback($callback)
-            );
-        });
-    }
-
-    /**
-     * Run a dictionary map over the items.
-     *
-     * The callback should return an associative array with a single key/value pair.
-     *
-     * @param  callable  $callback
-     * @return static
-     */
-    public function mapToDictionary(callable $callback)
-    {
-        return $this->runViaLaravelCollection(function () use ($callback) {
-            return parent::mapToDictionary(
-                $callback
-            );
-        });
-    }
-
-    /**
      * Execute a closure via Laravel's Collection
      *
-     * @param $param
+     * @param $closure
+     * @param null $method
      * @return mixed
      */
-    private function runViaLaravelCollection($param)
+    private function runViaLaravelCollection($closure, $method = null)
     {
-        $this->createItems();
+        $collection = new IlluminateExtractedCollection($this->__toArray());
 
-        $result = $this->__wrap($param());
+        $result = $closure($collection);
 
-        $this->dropItems();
+        if (! $this->methodMustReturnArray($method)) {
+            $result = $this->coollectizeItems($result);
+        }
+
+        $this->items = $collection->all();
 
         return $result;
     }
 
     /**
-     * Should it raise exception when the property is null?
+     * Does the method must return an array?
      *
+     * @param $method
      * @return bool
      */
-    public static function shouldRaiseExceptionOnNull()
+    public function methodMustReturnArray($method)
     {
-        return self::$raiseExceptionOnNull;
-    }
-
-    /**
-     * Get and remove the last item from the collection.
-     *
-     * @return mixed|static
-     */
-    public function pop()
-    {
-        return $this->runViaLaravelCollection(function () {
-            return parent::pop();
-        });
-    }
-
-    /**
-     * Get and remove an item from the collection.
-     *
-     * @param  mixed  $key
-     * @param  mixed  $default
-     * @return mixed
-     */
-    public function pull($key, $default = null)
-    {
-        return $this->runViaLaravelCollection(function () use ($key, $default) {
-            return parent::pull($key, $default);
-        });
-    }
-
-    /**
-     * Reduce the collection to a single value.
-     *
-     * @param  callable  $callback
-     * @param  mixed  $initial
-     * @return mixed|static
-     */
-    public function reduce(callable $callback, $initial = null)
-    {
-        return $this->runViaLaravelCollection(function () use ($callback, $initial) {
-            return parent::reduce(
-                $this->coollectizeCallbackForReduce($callback),
-                $initial
-            );
-        });
-    }
-
-    /**
-     * Merge the collection with the given items.
-     *
-     * @param  mixed  $items
-     * @return static
-     */
-    public function merge($items)
-    {
-        return $this->runViaLaravelCollection(function () use ($items) {
-            return parent::merge($items);
-        });
+        return in_array($method, static::$returnArray);
     }
 
     /**
@@ -441,39 +322,6 @@ class Coollection extends IlluminateCollection
     public static function setRaiseExceptionOnNull(bool $raiseExceptionOnNull)
     {
         self::$raiseExceptionOnNull = $raiseExceptionOnNull;
-    }
-
-    /**
-     * Get and remove the first item from the collection.
-     *
-     * @return mixed|static
-     */
-    public function shift()
-    {
-        return $this->runViaLaravelCollection(function () {
-            return parent::shift();
-        });
-    }
-
-    /**
-     * Splice a portion of the underlying collection array.
-     *
-     * @param  int  $offset
-     * @param  int|null  $length
-     * @param  mixed  $replacement
-     * @return static
-     */
-    public function splice($offset, $length = null, $replacement = [])
-    {
-        $args = func_num_args();
-
-        return $this->runViaLaravelCollection(function () use ($offset, $length, $replacement, $args) {
-            if ($args == 1) {
-                return parent::splice($offset);
-            }
-
-            return parent::splice($offset, $length, $replacement);
-        });
     }
 
     /**
@@ -507,50 +355,19 @@ class Coollection extends IlluminateCollection
         }
 
         return $this->isArrayable($value)
-            ? new static(parent::wrap($value)->toArray())
+            ? new static($this->wrap($value)->toArray())
             : $value;
     }
 
     /**
-     * Get the last item from the collection.
+     * Return only unique items from the collection array using strict comparison.
      *
-     * @param  callable|null  $callback
-     * @param  mixed  $default
-     * @return mixed|static
+     * @param  string|callable|null  $key
+     * @return static
      */
-    public function last(callable $callback = null, $default = null)
+    public function uniqueStrict($key = null)
     {
-        return $this->runViaLaravelCollection(function () use ($callback, $default) {
-            return parent::last($callback, $default);
-        });
-    }
-
-    /**
-     * Get one or a specified number of items randomly from the collection.
-     *
-     * @param  int|null  $number
-     * @return mixed
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function random($number = null)
-    {
-        return $this->runViaLaravelCollection(function () use ($number) {
-            return parent::random($number);
-        });
-    }
-
-    /**
-     * Get the mode of a given key.
-     *
-     * @param  mixed  $key
-     * @return mixed|static
-     */
-    public function mode($key = null)
-    {
-        return $this->runViaLaravelCollection(function () use ($key) {
-            return parent::mode($key);
-        });
+        return $this->unique($key, true);
     }
 
     /**
@@ -573,6 +390,34 @@ class Coollection extends IlluminateCollection
     }
 
     /**
+     * Get a value retrieving callback.
+     *
+     * @param  string  $value
+     * @return callable
+     */
+    protected function valueRetriever($value)
+    {
+        if ($this->useAsCallable($value)) {
+            return $value;
+        }
+
+        return function ($item) use ($value) {
+            return data_get($item, $value);
+        };
+    }
+
+    /**
+     * Determine if the given value is callable, but not a string.
+     *
+     * @param  mixed  $value
+     * @return bool
+     */
+    protected function useAsCallable($value)
+    {
+        return ! is_string($value) && is_callable($value);
+    }
+
+    /**
      * Determine if an item exists at an offset.
      *
      * @param  mixed  $key
@@ -580,7 +425,7 @@ class Coollection extends IlluminateCollection
      */
     public function offsetExists($key)
     {
-        return array_key_exists($key, $this->__items);
+        return array_key_exists($key, $this->items);
     }
 
     /**
@@ -591,7 +436,7 @@ class Coollection extends IlluminateCollection
      */
     public function offsetGet($key)
     {
-        return $this->__items[$key];
+        return $this->items[$key];
     }
 
     /**
@@ -604,9 +449,9 @@ class Coollection extends IlluminateCollection
     public function offsetSet($key, $value)
     {
         if (is_null($key)) {
-            $this->__items[] = $value;
+            $this->items[] = $value;
         } else {
-            $this->__items[$key] = $value;
+            $this->items[$key] = $value;
         }
     }
 
@@ -618,7 +463,26 @@ class Coollection extends IlluminateCollection
      */
     public function offsetUnset($key)
     {
-        unset($this->__items[$key]);
+        unset($this->items[$key]);
+    }
+
+    /**
+     * @param $items
+     * @return array|Coollection
+     * @internal param $originalCallback
+     */
+    public function coollectizeCallbacks($items, $method)
+    {
+        foreach ($items as $key => $item) {
+            if ($item instanceof Closure) {
+                $items[$key] = $method === 'reduce'
+                    ? $this->coollectizeCallbackForReduce($item)
+                    : $this->coollectizeCallback($item)
+                ;
+            }
+        }
+
+        return $items;
     }
 
     /**
@@ -627,11 +491,7 @@ class Coollection extends IlluminateCollection
      */
     public function coollectizeCallback(callable $originalCallback = null)
     {
-        if (is_null($originalCallback)) {
-            return null;
-        }
-
-        return function ($value, $key) use ($originalCallback) {
+        return function ($value = null, $key = null) use ($originalCallback) {
             return $originalCallback(
                 $this->__wrap($value), $key
             );
@@ -642,110 +502,14 @@ class Coollection extends IlluminateCollection
      * @param $originalCallback
      * @return callable
      */
-    public function coollectizeCallbackForReduce(callable $originalCallback = null)
+    public function coollectizeCallbackForReduce(callable $originalCallback)
     {
-        if (is_null($originalCallback)) {
-            return null;
-        }
-
         return function ($carry, $item) use ($originalCallback) {
             return $originalCallback(
                 $carry,
                 $this->__wrap($item)
             );
         };
-    }
-
-    /**
-     * Get the collection of items as a plain array.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        $this->createItems();
-
-        $result = parent::toArray();
-
-        $this->dropItems();
-
-        return $result;
-    }
-
-    /**
-     * Intersect the collection with the given items.
-     *
-     * @param  mixed  $items
-     * @return static
-     */
-    public function intersect($items)
-    {
-        return $this->runViaLaravelCollection(function () use ($items) {
-            return parent::intersect($items);
-        });
-    }
-
-    /**
-     * Intersect the collection with the given items by key.
-     *
-     * @param  mixed  $items
-     * @return static
-     */
-    public function intersectByKeys($items)
-    {
-        return $this->runViaLaravelCollection(function () use ($items) {
-            return parent::intersectByKeys($items);
-        });
-    }
-
-    /**
-     * Get the items in the collection whose keys are not present in the given items.
-     *
-     * @param  mixed  $items
-     * @return static
-     */
-    public function diffKeys($items)
-    {
-        return $this->runViaLaravelCollection(function () use ($items) {
-            return parent::diffKeys($items);
-        });
-    }
-
-    /**
-     * Get the items in the collection whose keys and values are not present in the given items.
-     *
-     * @param  mixed  $items
-     * @return static
-     */
-    public function diffAssoc($items)
-    {
-        return $this->runViaLaravelCollection(function () use ($items) {
-            return parent::diffAssoc($items);
-        });
-    }
-
-    /**
-     * Determine if the collection is empty or not.
-     *
-     * @return bool
-     */
-    public function isEmpty()
-    {
-        return $this->runViaLaravelCollection(function () {
-            return parent::isEmpty();
-        });
-    }
-
-    /**
-     * Count the number of items in the collection.
-     *
-     * @return int
-     */
-    public function count()
-    {
-        return $this->runViaLaravelCollection(function () {
-            return parent::count();
-        });
     }
 
     /**
@@ -756,50 +520,8 @@ class Coollection extends IlluminateCollection
      */
     public function overwrite($overwrite)
     {
-        $this->__items = array_replace_recursive($this->__items, $this->getArrayableItems($overwrite));
+        $this->items = array_replace_recursive($this->items, $this->getArrayableItems($overwrite));
 
         return $this;
-    }
-
-    /**
-     * Sort by key.
-     *
-     * @return Coollection
-     */
-    public function sortByKey()
-    {
-        $items = $this->__items;
-
-        ksort($items);
-
-        return $this->__wrap($items);
-    }
-
-    /**
-     * Sort by key.
-     *
-     * @return Coollection
-     */
-    public function sortByKeysRecursive()
-    {
-        $items = $this->__items;
-
-        array_sort_by_keys_recursive($items);
-
-        return $this->__wrap($items);
-    }
-
-    /**
-     * Get the values of a given key.
-     *
-     * @param  string|array  $value
-     * @param  string|null  $key
-     * @return static
-     */
-    public function pluck($value, $key = null)
-    {
-        return $this->runViaLaravelCollection(function () use ($value, $key) {
-            return parent::pluck($value, $key);
-        });
     }
 }

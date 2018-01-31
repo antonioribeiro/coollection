@@ -1,7 +1,7 @@
 <?php
 
-use IlluminateExtracted\Support\Str;
 use PragmaRX\Coollection\Package\Coollection;
+use IlluminateAgnostic\Collection\Support\Str;
 
 if (! function_exists('coollect')) {
     /**
@@ -60,6 +60,9 @@ if (! function_exists('upper')) {
     }
 }
 
+/**
+ * @codeCoverageIgnore
+ */
 if (! function_exists('dump')) {
     function dump(...$args)
     {
@@ -69,6 +72,9 @@ if (! function_exists('dump')) {
     }
 }
 
+/**
+ * @codeCoverageIgnore
+ */
 if (! function_exists('dd')) {
     function dd(...$args)
     {

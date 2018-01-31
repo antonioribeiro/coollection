@@ -26,8 +26,7 @@
 
     "require": {
         "php" : ">=7.0",
-        "symfony/var-dumper": "~3.3",
-        "nesbot/carbon": "~1.20"
+        "pragmarx/ia-collection": ">=5.5.33"
     },
 
     "require-dev": {
@@ -44,8 +43,7 @@
             "IlluminateExtracted\\Tests\\": "tests/IlluminateExtracted"
         },
         "files": [
-            "src/package/Support/helpers.php",
-            "src/package/Support/IlluminateExtracted/Support/helpers.php"
+            "src/package/Support/helpers.php"
         ]
     },
 

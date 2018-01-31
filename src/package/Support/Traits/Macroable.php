@@ -1,6 +1,6 @@
 <?php
 
-namespace IlluminateExtracted\Support\Traits;
+namespace PragmaRX\Coollection\Package\Support\Traits;
 
 use Closure;
 use ReflectionClass;
@@ -82,7 +82,7 @@ trait Macroable
     }
 
     /**
-     * Dynamically handle calls to the class.
+     * Calls a macro.
      *
      * @param  string  $method
      * @param  array   $parameters
@@ -90,12 +90,8 @@ trait Macroable
      *
      * @throws \BadMethodCallException
      */
-    public function __call($method, $parameters)
+    public function callMacro($method, $parameters)
     {
-        if (! static::hasMacro($method)) {
-            throw new BadMethodCallException("Method {$method} does not exist.");
-        }
-
         $macro = static::$macros[$method];
 
         if ($macro instanceof Closure) {
