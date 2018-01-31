@@ -198,6 +198,10 @@ class Coollection implements Arrayable, ArrayAccess
     {
         if (($value = $this->call('get', [$key, static::NOT_FOUND])) === static::NOT_FOUND) {
             $value = Arr::get($this->items, $key, $default);
+
+            if (is_array($value)) {
+                $value = $this->__wrap($value);
+            }
         }
 
         return $value;
