@@ -1041,7 +1041,7 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testValueRetriever()
     {
-        $c = $this->coollection->grades->unique(function($v1, $v2) {
+        $c = $this->coollection->grades->unique(function ($v1, $v2) {
             return $v1 !== $v2;
         });
 
@@ -1215,7 +1215,7 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         Coollection::mixin($mixin = new class() {
             public function testMacroUpper()
             {
-                return function() {
+                return function () {
                     return 'MACRO IS UPPER';
                 };
             }
@@ -1404,4 +1404,3 @@ class TestJsonSerializeObject implements JsonSerializable
         return ['foo' => 'bar'];
     }
 }
-
