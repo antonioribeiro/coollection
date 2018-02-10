@@ -1,7 +1,7 @@
 <?php
 
+use IlluminateAgnostic\Str\Support\Str;
 use PragmaRX\Coollection\Package\Coollection;
-use IlluminateAgnostic\Collection\Support\Str;
 
 if (! function_exists('coollect')) {
     /**

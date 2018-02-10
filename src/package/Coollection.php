@@ -8,13 +8,13 @@ use Exception;
 use ArrayAccess;
 use JsonSerializable;
 use IteratorAggregate;
-use IlluminateAgnostic\Collection\Support\Str;
-use IlluminateAgnostic\Collection\Support\Arr;
-use IlluminateAgnostic\Collection\Support\Traits\Macroable;
-use IlluminateAgnostic\Collection\Contracts\Support\Jsonable;
-use IlluminateAgnostic\Collection\Contracts\Support\Arrayable;
-use IlluminateAgnostic\Collection\Support\HigherOrderCollectionProxy;
-use IlluminateAgnostic\Collection\Support\Collection as IlluminateAgnosticCollection;
+use IlluminateAgnostic\Str\Support\Str;
+use IlluminateAgnostic\Arr\Support\Arr;
+use Tightenco\Collect\Support\Traits\Macroable;
+use Tightenco\Collect\Contracts\Support\Jsonable;
+use Tightenco\Collect\Contracts\Support\Arrayable;
+use Tightenco\Collect\Support\HigherOrderCollectionProxy;
+use Tightenco\Collect\Support\Collection as TightencoCollect;
 
 class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregate, Jsonable, JsonSerializable
 {
@@ -297,7 +297,7 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      */
     private function runViaLaravelCollection($closure, $method = null)
     {
-        $collection = new IlluminateAgnosticCollection($this->__toArray());
+        $collection = new TightencoCollect($this->__toArray());
 
         $result = $closure($collection);
 

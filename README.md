@@ -28,6 +28,10 @@ $collection->flatten()->cars->filter(function($car) { return $car->name == 'ferr
 $countries->where('name.common', 'United States')->first()->currency->name->english;
 ```
 
+#### Tightenco\Collect
+
+To be agnostic and have complete idependence from Laravel's, but also to allow it to be used in Laravel applications, this package extends [Tightenco\Collect](https://github.com/tightenco/collect), developed by [Matt Stauffer](https://twitter.com/stauffermatt) from [Tighten](https://twitter.com/tightenco). 
+
 ## Why?
 
 #### Answering with a question: which one is easier to look at?
@@ -109,7 +113,7 @@ $collection = collect(['my collection']);
 
 ## Documentation
 
-It's Laravel's Collection, at full power, so you can check [its docs](https://laravel.com/docs/5.5/collections). The only difference is that you can access items (array keys) as properties, like any other PHP object:
+It's Laravel's Collection, at full power, so you can check [its docs](https://laravel.com/docs/5.6/collections). The only difference is that you can access items (array keys) as properties, like any other PHP object:
 
 ``` php
 $collection->map($mapper)->reduce($reducer)->random()->address->street
@@ -181,7 +185,10 @@ If you discover any security related issues, please email acr@antoniocarlosribei
 
 ## Credits
 
-- [Antonio Carlos Ribeiro](https://twitter.com/iantonioribeiro)
+- This package is an extension of [Tightenco\Collect](https://github.com/tightenco/collect), developed by [Matt Stauffer](https://twitter.com/stauffermatt) from [Tighten](https://twitter.com/tightenco).
+- [Tightenco\Collect](https://github.com/tightenco/collect) is an extraction of The Laravel Framework's Collection, created by [Taylor Otwell](https://twitter.com/taylorotwell).
+- Package creator [Antonio Carlos Ribeiro](https://twitter.com/iantonioribeiro)
+- [Contributors](https://github.com/antonioribeiro/ia-str/graphs/contributors)
 
 ## License
 
