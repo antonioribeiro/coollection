@@ -7,9 +7,9 @@ use JsonSerializable;
 use BadMethodCallException;
 use PragmaRX\Coollection\Package\Coollection;
 use PragmaRX\Coollection\Tests\Support\Dummy;
-use Tightenco\Collect\Contracts\Support\Jsonable;
-use Tightenco\Collect\Contracts\Support\Arrayable;
-use Tightenco\Collect\Support\Collection as IlluminateExtractedCollection;
+use IlluminateAgnostic\Collection\Contracts\Support\Jsonable;
+use IlluminateAgnostic\Collection\Contracts\Support\Arrayable;
+use IlluminateAgnostic\Collection\Support\Collection as IlluminateExtractedCollection;
 
 class CoollectionTest extends \PHPUnit\Framework\TestCase
 {
