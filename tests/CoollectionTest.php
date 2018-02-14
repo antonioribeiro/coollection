@@ -18,12 +18,16 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
             'first_name' => 'Antonio Carlos',
             'last_name' => 'Ribeiro',
             'address' => [
-                'street' => 'Praia de Copacabana',
                 'city' => 'Rio de Janeiro',
+                'street' => 'Praia de Copacabana',
             ],
             'other_address' => [
                 'city' => 'New York',
                 'street' => '5th Avenue',
+            ],
+            'inverted_address' => [
+                'street' => '5th Avenue',
+                'city' => 'New York',
             ],
             'skills' => [
                 'php' => [
@@ -285,18 +289,18 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testWhen()
     {
-        $this->assertEquals($this->coollection->count(), 11);
+        $this->assertEquals($this->coollection->count(), 12);
 
         $this->coollection->skills->when(true, function () {
             return $this->coollection->push('void');
         });
 
-        $this->assertEquals($this->coollection->count(), 12);
+        $this->assertEquals($this->coollection->count(), 13);
     }
 
     public function testUnless()
     {
-        $this->assertEquals($this->coollection->count(), 11);
+        $this->assertEquals($this->coollection->count(), 12);
 
         $this->coollection->skills->unless(false, function () {
             return $this->coollection->push('void');
@@ -306,7 +310,7 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
             return $this->coollection->push('void');
         });
 
-        $this->assertEquals($this->coollection->count(), 12);
+        $this->assertEquals($this->coollection->count(), 13);
     }
 
     public function testWhere()
@@ -1353,9 +1357,9 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testSortByKeysRecursive()
     {
-        $this->assertEquals(['street', 'city'], $this->coollection->address->keys()->toArray());
+        $this->assertEquals(['street', 'city'], $this->coollection->inverted_address->keys()->toArray());
 
-        $this->assertEquals(['city', 'street'], $this->coollection->sortByKeysRecursive()->address->keys()->toArray());
+        $this->assertEquals(['city', 'street'], $this->coollection->sortByKeysRecursive()->inverted_address->keys()->toArray());
     }
 
     public function testTraversable()
