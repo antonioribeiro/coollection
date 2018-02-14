@@ -18,8 +18,8 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
             'first_name' => 'Antonio Carlos',
             'last_name' => 'Ribeiro',
             'address' => [
-                'city' => 'Rio de Janeiro',
                 'street' => 'Praia de Copacabana',
+                'city' => 'Rio de Janeiro',
             ],
             'other_address' => [
                 'city' => 'New York',
@@ -1349,6 +1349,13 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $items = new \ArrayIterator(['foo' => 'bar']);
         $array = $method->invokeArgs($coollection, [$items]);
         $this->assertSame(['foo' => 'bar'], $array);
+    }
+
+    public function testSortByKeysRecursive()
+    {
+        $this->assertEquals(['street', 'city'], $this->coollection->address->keys()->toArray());
+
+        $this->assertEquals(['city', 'street'], $this->coollection->sortByKeysRecursive()->address->keys()->toArray());
     }
 
     public function testTraversable()

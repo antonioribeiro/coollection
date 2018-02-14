@@ -580,4 +580,18 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
     {
         return $this->call('getIterator');
     }
+
+    /**
+     * Sort by key.
+     *
+     * @return Coollection
+     */
+    public function sortByKeysRecursive()
+    {
+        $items = $this->toArray();
+
+        array_sort_by_keys_recursive($items);
+
+        return $this->__wrap($items);
+    }
 }

@@ -97,3 +97,21 @@ if (! function_exists('starts_with')) {
         return Str::startsWith($haystack, $needles);
     }
 }
+
+if (! function_exists('array_sort_by_keys_recursive')) {
+    /**
+     * Determine if a given string starts with a given substring.
+     *
+     * @param array $array
+     */
+    function array_sort_by_keys_recursive(array &$array)
+    {
+        ksort($array, SORT_NATURAL);
+
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                array_sort_by_keys_recursive($array[$key]);
+            }
+        }
+    }
+}
