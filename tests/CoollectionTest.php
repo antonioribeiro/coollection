@@ -610,25 +610,23 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(Coollection::class, $sequence);
     }
 
-//    public function testMapToDictionary() // TODO --- broken
-//    {
-//        $c = collect($this->full[0]['skills'])->mapToDictionary(function ($item) {
-//            return $item;
-//        });
-//
-//        $o = $this->coollection->skills->mapToDictionary(function ($item) {
-//            $this->assertInstanceOf(Coollection::class, $item);
-//
-//            return $item;
-//        });
-//
-//        $this->assertEquals(
-//            $c->flatten()->values()->toArray(),
-//            $o->flatten()->values()->toArray()
-//        );
-//
-//        $this->assertInstanceOf(Coollection::class, $c);
-//    }
+    public function testMapToDictionary() // TODO --- broken
+    {
+        $data = new Coollection([
+            ['id' => 1, 'name' => 'A'],
+            ['id' => 2, 'name' => 'B'],
+            ['id' => 3, 'name' => 'C'],
+            ['id' => 4, 'name' => 'B'],
+        ]);
+        $groups = $data->mapToDictionary(function ($item, $key) {
+            return [$item['name'] => $item['id']];
+        });
+        $this->assertInstanceOf(Coollection::class, $groups);
+        $this->assertEquals(['A' => [1], 'B' => [2, 4], 'C' => [3]], $groups->toArray());
+        $this->assertInternalType('array', $groups->toArray()['A']);
+
+        $this->assertInstanceOf(Coollection::class, $groups);
+    }
 
     public function testMapToGroups()
     {
@@ -1427,24 +1425,7 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertLessThan(.003, $this->timerStop());
     }
 
-    // public function map(callable $callback) TODO
-    // public function mapSpread(callable $callback) TODO
     // public function mapToDictionary(callable $callback) TODO
-    // public function mapToGroups(callable $callback) TODO
-    // public function mapWithKeys(callable $callback) TODO
-    // public function flatMap(callable $callback) TODO
-    // public function max($callback = null) TODO
-    // public function min($callback = null) TODO
-    // public function partition($callback) TODO
-    // public function pipe(callable $callback) TODO
-    // public function reduce(callable $callback, $initial = null) TODO
-    // public function reject($callback) TODO
-    // public function sort(callable $callback = null) TODO
-    // public function sortBy($callback, $options = SORT_REGULAR, $descending = false) TODO
-    // public function sortByDesc($callback, $options = SORT_REGULAR) TODO
-    // public function sum($callback = null) TODO
-    // public function tap(callable $callback) TODO
-    // public function transform(callable $callback) TODO
 }
 
 class TestSupportCollectionHigherOrderItem
