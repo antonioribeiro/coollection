@@ -10,6 +10,7 @@ use PragmaRX\Coollection\Tests\Support\Dummy;
 use IlluminateAgnostic\Collection\Contracts\Support\Jsonable;
 use IlluminateAgnostic\Collection\Contracts\Support\Arrayable;
 use IlluminateAgnostic\Collection\Support\Collection as IlluminateExtractedCollection;
+use SebastianBergmann\Timer\Timer;
 
 class CoollectionTest extends \PHPUnit\Framework\TestCase
 {
@@ -105,6 +106,20 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
      */
     private $array;
 
+    protected function makeBigArray()
+    {
+        // Needs 32M to run this
+        // ini_set('memory_limit', '32M');
+
+        $big = [];
+
+        foreach (range(1, 25000) as $counter) {
+            $big[$counter] = coollect(static::DATA);
+
+            $big[$counter]['id'] = $counter;
+        }
+    }
+
     /**
      *
      */
@@ -114,7 +129,7 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->coollection = $this->full->where('last_name', 'Ribeiro')->first();
 
-        $this->array =  $this->coollection->toArray();
+        $this->array = $this->coollection->toArray();
     }
 
     public function testData()
@@ -1362,6 +1377,26 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->assertEquals(10, $sum);
+    }
+
+    public function testItsFast()
+    {
+        $big = coollect($this->makeBigArray());
+
+        // Usually takes 0.001 seconds
+        Timer::start();
+        $big->mapWithKeys(function ($data, $key) {
+            return [$key => $data];
+        });
+        $this->assertLessThan(.003, Timer::stop());
+
+        Timer::start();
+        $big->toArray();
+        $this->assertLessThan(.003, Timer::stop());
+
+        Timer::start();
+        $big->where('id', 23000);
+        $this->assertLessThan(.003, Timer::stop());
     }
 
     // public function map(callable $callback) TODO
