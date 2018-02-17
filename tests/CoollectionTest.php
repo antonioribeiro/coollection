@@ -10,7 +10,6 @@ use PragmaRX\Coollection\Tests\Support\Dummy;
 use IlluminateAgnostic\Collection\Contracts\Support\Jsonable;
 use IlluminateAgnostic\Collection\Contracts\Support\Arrayable;
 use IlluminateAgnostic\Collection\Support\Collection as IlluminateExtractedCollection;
-use SebastianBergmann\Timer\Timer;
 
 class CoollectionTest extends \PHPUnit\Framework\TestCase
 {
@@ -139,6 +138,24 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     public function testData()
     {
         $this->assertEquals($this->array, static::DATA[0]);
+    }
+
+    private function timerStart()
+    {
+        if (class_exists('SebastianBergmann\Timer\Timer')) {
+            \SebastianBergmann\Timer\Timer::start();
+        } else {
+            PHP_Timer::start();
+        }
+    }
+
+    private function timerStop()
+    {
+        if (class_exists('SebastianBergmann\Timer\Timer')) {
+            return \SebastianBergmann\Timer\Timer::stop();
+        } else {
+            return PHP_Timer::stop();
+        }
     }
 
     public function wrapIfArrayable()
@@ -1395,19 +1412,19 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $big = coollect($this->makeBigArray());
 
         // Usually takes 0.001 seconds
-        Timer::start();
+        $this->timerStart();
         $big->mapWithKeys(function ($data, $key) {
             return [$key => $data];
         });
-        $this->assertLessThan(.003, Timer::stop());
+        $this->assertLessThan(.003, $this->timerStop());
 
-        Timer::start();
+        $this->timerStart();
         $big->toArray();
-        $this->assertLessThan(.003, Timer::stop());
+        $this->assertLessThan(.003, $this->timerStop());
 
-        Timer::start();
+        $this->timerStart();
         $big->where('id', 23000);
-        $this->assertLessThan(.003, Timer::stop());
+        $this->assertLessThan(.003, $this->timerStop());
     }
 
     // public function map(callable $callback) TODO
