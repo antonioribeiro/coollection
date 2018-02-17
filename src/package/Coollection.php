@@ -10,6 +10,7 @@ use JsonSerializable;
 use IteratorAggregate;
 use IlluminateAgnostic\Str\Support\Str;
 use IlluminateAgnostic\Arr\Support\Arr;
+use IlluminateAgnostic\Collection\Support\Collection;
 use IlluminateAgnostic\Collection\Support\Traits\Macroable;
 use IlluminateAgnostic\Collection\Contracts\Support\Jsonable;
 use IlluminateAgnostic\Collection\Contracts\Support\Arrayable;
@@ -220,6 +221,10 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
     {
         if (is_array($items)) {
             return $items;
+        } elseif ($items instanceof self) {
+            return $items->getItems();
+        } elseif ($items instanceof Collection) {
+            return $items->all();
         } elseif ($items instanceof Arrayable) {
             return $items->toArray();
         } elseif ($items instanceof Jsonable) {
@@ -593,5 +598,15 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
         array_sort_by_keys_recursive($items);
 
         return $this->__wrap($items);
+    }
+
+    /**
+     * Get raw items.
+     *
+     * @return array
+     */
+    public function getItems()
+    {
+        return $this->items;
     }
 }
