@@ -145,7 +145,7 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         if (class_exists('SebastianBergmann\Timer\Timer')) {
             \SebastianBergmann\Timer\Timer::start();
         } else {
-            PHP_Timer::start();
+            \PHP_Timer::start();
         }
     }
 
@@ -154,7 +154,7 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         if (class_exists('SebastianBergmann\Timer\Timer')) {
             return \SebastianBergmann\Timer\Timer::stop();
         } else {
-            return PHP_Timer::stop();
+            return \PHP_Timer::stop();
         }
     }
 
