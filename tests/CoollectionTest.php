@@ -1423,6 +1423,18 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $this->timerStart();
         $big->where('id', 23000);
         $this->assertLessThan(.003, $this->timerStop());
+
+        $this->timerStart();
+        $big->wrap($big->toArray());
+        $this->assertLessThan(.003, $this->timerStop());
+
+        $this->timerStart();
+        $big->isEmpty();
+        $this->assertLessThan(.003, $this->timerStop());
+
+        $this->timerStart();
+        $big->count();
+        $this->assertLessThan(.003, $this->timerStop());
     }
 
     // public function mapToDictionary(callable $callback) TODO
