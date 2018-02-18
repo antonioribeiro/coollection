@@ -66,7 +66,7 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      *
      * @var array
      */
-    protected $toArrayCache = [];
+    protected $cache = [];
 
     /**
      * Create a new coollection.
@@ -137,6 +137,15 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
     }
 
     /**
+     * @param $value
+     * @return string
+     */
+    protected function generateKey($value)
+    {
+        return sha1($this->serialize($value));
+    }
+
+    /**
      * Get the collection of items as a plain array.
      *
      * @return array
@@ -185,8 +194,8 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
     {
         $value = is_null($value) ? $this->items : $value;
 
-        if (isset($this->toArrayCache[$key = sha1($this->serialize($value))])) {
-            return $this->toArrayCache[$key];
+        if (($cached = $this->getCachedValue($key = $this->generateKey($value))) !== static::NOT_FOUND) {
+            return $cached;
         }
 
         if (! $this->isArrayable($value)) {
@@ -202,7 +211,7 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
         }, $this->getArrayableItems($value));
 
         if (! empty($result)) {
-            $this->toArrayCache[$key] = $result;
+            $this->cache[$key] = $result;
         }
 
         return $result;
@@ -226,6 +235,15 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
         }
 
         return $value;
+    }
+
+    public function getCachedValue($key)
+    {
+        if (isset($this->cache[$key])) {
+            return $this->cache[$key];
+        }
+
+        return static::NOT_FOUND;
     }
 
     /**
@@ -386,34 +404,6 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
         return $this->isArrayable($value)
             ? new static($this->wrap($value)->toArray())
             : $value;
-    }
-
-    /**
-     * Get a value retrieving callback.
-     *
-     * @param  string  $value
-     * @return callable
-     */
-    protected function valueRetriever($value)
-    {
-        if ($this->useAsCallable($value)) {
-            return $value;
-        }
-
-        return function ($item) use ($value) {
-            return data_get($item, $value);
-        };
-    }
-
-    /**
-     * Determine if the given value is callable, but not a string.
-     *
-     * @param  mixed  $value
-     * @return bool
-     */
-    protected function useAsCallable($value)
-    {
-        return ! is_string($value) && is_callable($value);
     }
 
     /**
@@ -597,13 +587,14 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
         return $this->items;
     }
 
+    /**
+     * Serialize values for key usage.
+     *
+     * @param $data
+     * @return string
+     */
     public function serialize($data)
     {
         return json_encode([$data]);
-    }
-
-    public function unserialize($data)
-    {
-        return json_decode($data);
     }
 }
