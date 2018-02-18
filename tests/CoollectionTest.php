@@ -1437,7 +1437,21 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertLessThan(.003, $this->timerStop());
     }
 
-    // public function mapToDictionary(callable $callback) TODO
+    public function testClosureInsideCoollection()
+    {
+        $a = [
+            'a' => 1,
+            'b' => 2,
+            'c' => 3,
+            'f' => function($value) {
+                return strtoupper($value);
+            },
+        ];
+
+        $this->assertEquals('UPPER',coollect($a)->get('f')('upper'));
+
+        $this->assertEquals('UPPER',coollect($a)->get('f')('upper'));
+    }
 }
 
 class TestSupportCollectionHigherOrderItem

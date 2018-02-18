@@ -62,6 +62,13 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
     ];
 
     /**
+     * Cache __toArray results.
+     *
+     * @var array
+     */
+    protected $toArrayCache = [];
+
+    /**
      * Create a new coollection.
      *
      * @param  mixed  $items
@@ -178,17 +185,27 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
     {
         $value = is_null($value) ? $this->items : $value;
 
+        if (isset($this->toArrayCache[$key = sha1($this->serialize($value))])) {
+            return $this->toArrayCache[$key];
+        }
+
         if (! $this->isArrayable($value)) {
             return $value;
         }
 
-        return array_map(function ($value) {
+        $result = array_map(function ($value) {
             if ($this->isArrayable($value)) {
                 return $this->__toArray($value);
             }
 
             return $value;
         }, $this->getArrayableItems($value));
+
+        if (! empty($result)) {
+            $this->toArrayCache[$key] = $result;
+        }
+
+        return $result;
     }
 
     /**
@@ -369,36 +386,6 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
         return $this->isArrayable($value)
             ? new static($this->wrap($value)->toArray())
             : $value;
-    }
-
-    /**
-     * Return only unique items from the collection array using strict comparison.
-     *
-     * @param  string|callable|null  $key
-     * @return static
-     */
-    public function uniqueStrict($key = null)
-    {
-        return $this->unique($key, true);
-    }
-
-    /**
-     * ORIGINAL IS BROKEN IN LARAVEL
-     * PR: https://github.com/laravel/framework/pull/21854#issuecomment-340220246
-     */
-    public function unique($key = null, $strict = false)
-    {
-        $callback = $this->valueRetriever($key);
-
-        $exists = [];
-
-        return $this->reject(function ($item, $key) use ($callback, $strict, &$exists) {
-            if (in_array($id = $callback($item, $key), $exists, $strict)) {
-                return true;
-            }
-
-            $exists[] = $id;
-        });
     }
 
     /**
@@ -608,5 +595,15 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
     public function getItems()
     {
         return $this->items;
+    }
+
+    public function serialize($data)
+    {
+        return json_encode([$data]);
+    }
+
+    public function unserialize($data)
+    {
+        return json_decode($data);
     }
 }
