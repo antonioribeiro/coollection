@@ -1,14 +1,16 @@
 # Changelog
 
-## v0.5.3 - 2018-02-18
+## v0.5.4 - 2018-02-18
 ### Changed
 Huge improvements in speed
 ### Added
 More tests
 
-## v0.5.1 & v0.5.2 - 2018-02-18
+## v0.5.3 - 2018-02-17
+## v0.5.2 - 2018-02-13
+## v0.5.1 - 2018-02-13
 ### Fixed
-Some bugs
+Some bugs squashed
 
 ## v0.5.0 - 2018-01-21
 ### Changed
