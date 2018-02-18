@@ -1140,6 +1140,24 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     {
         $a = [
             'a' => 2,
+            'c' => 3,
+        ];
+
+        $b = [
+            'b' => 3,
+            'c' => 4,
+        ];
+
+        $c = [
+            'a' => 2,
+            'b' => 3,
+            'c' => 4,
+        ];
+
+        $this->assertEquals($c, coollect($a)->overwrite($b)->toArray());
+
+        $a = [
+            'a' => 2,
             'b' => 3,
             'c' => [
                 'd' => 4,

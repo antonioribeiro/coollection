@@ -311,7 +311,7 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      */
     private function runViaLaravelCollection($closure, $method = null)
     {
-        $collection = new TightencoCollect($this->__toArray());
+        $collection = new TightencoCollect($this->items);
 
         $result = $closure($collection);
 
