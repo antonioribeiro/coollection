@@ -1443,14 +1443,14 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
             'a' => 1,
             'b' => 2,
             'c' => 3,
-            'f' => function($value) {
+            'f' => function ($value) {
                 return strtoupper($value);
             },
         ];
 
-        $this->assertEquals('UPPER',coollect($a)->get('f')('upper'));
+        $this->assertEquals('UPPER', coollect($a)->get('f')('upper'));
 
-        $this->assertEquals('UPPER',coollect($a)->get('f')('upper'));
+        $this->assertEquals('UPPER', coollect($a)->get('f')('upper'));
     }
 }
 
