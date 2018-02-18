@@ -1,6 +1,16 @@
 # Changelog
 
-## v0.3.0 - 2018-01-21
+## v0.5.3 - 2018-02-18
+### Changed
+Huge improvements in speed
+### Added
+More tests
+
+## v0.5.1 & v0.5.2 - 2018-02-18
+### Fixed
+Some bugs
+
+## v0.5.0 - 2018-01-21
 ### Changed
 Upgrade script is now using Illuminate\Support\Collection directly.
 Tagging versions using the current Laravel version number.
