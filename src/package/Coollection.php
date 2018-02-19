@@ -544,7 +544,7 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      */
     public function sortByKey()
     {
-        $items = $this->__items;
+        $items = $this->items;
 
         ksort($items);
 
