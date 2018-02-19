@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.5.7 - 2018-02-18
+### Changed
+Added sortByKey() method
+### Added
+More tests
+
 ## v0.5.4 - 2018-02-18
 ### Changed
 Huge improvements in speed
