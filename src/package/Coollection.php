@@ -399,6 +399,10 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      */
     public function offsetGet($key)
     {
+        if (! isset($this->items[$key])) {
+            return null;
+        }
+
         return $this->items[$key];
     }
 
