@@ -542,6 +542,20 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      *
      * @return Coollection
      */
+    public function sortByKey()
+    {
+        $items = $this->__items;
+
+        ksort($items);
+
+        return $this->__wrap($items);
+    }
+
+    /**
+     * Recursively Sort by key.
+     *
+     * @return Coollection
+     */
     public function sortByKeysRecursive()
     {
         $items = $this->toArray();
