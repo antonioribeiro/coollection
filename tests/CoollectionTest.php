@@ -1470,6 +1470,47 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('UPPER', coollect($a)->get('f')('upper'));
     }
+
+    public function testSortByKey()
+    {
+        $coollection = coollect([
+            'c' => 3,
+            'b' => 2,
+            'a' => 1,
+            'f' => function ($value) {
+                return strtoupper($value);
+            },
+        ]);
+
+        $this->assertEquals(['a', 'b', 'c', 'f'], $coollection->sortByKey()->keys()->toArray());
+    }
+
+    public function testSortByKeyRecursive()
+    {
+        $a = [
+            'd' => [
+                'c' => 4,
+                'b' => 5,
+                'a' => 6,
+            ],
+            'c' => 3,
+            'b' => 2,
+            'a' => 1,
+        ];
+
+        $b = [
+            'a' => 1,
+            'b' => 2,
+            'c' => 3,
+            'd' => [
+                'a' => 6,
+                'b' => 5,
+                'c' => 4,
+            ],
+        ];
+
+        $this->assertEquals($b, coollect($a)->sortByKeysRecursive()->toArray());
+    }
 }
 
 class TestSupportCollectionHigherOrderItem
