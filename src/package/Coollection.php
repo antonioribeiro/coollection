@@ -483,7 +483,7 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      */
     public function overwrite($overwrite)
     {
-        $this->items = array_replace_recursive($this->items, $this->getArrayableItems($overwrite));
+        $this->items = array_replace_recursive($this->__toArray(), $this->getArrayableItems($overwrite));
 
         return $this;
     }
