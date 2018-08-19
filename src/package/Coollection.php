@@ -269,7 +269,7 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
             lower($key),
         ];
 
-        $data = $this->filter(function ($value,  $key) use ($cases) {
+        $data = $this->filter(function ($value, $key) use ($cases) {
             return array_search($key, $cases) !== false || array_search(lower($key), $cases) !== false;
         })->keys()->first();
 
