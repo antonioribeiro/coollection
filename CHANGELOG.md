@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6.0 - 2018-08-19
+### Added
+Improve search by key with any case, snake, camel, kebab, string
+
 ## v0.5.7 - 2018-02-18
 ### Changed
 Added sortByKey() method
