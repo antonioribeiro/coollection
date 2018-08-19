@@ -1211,12 +1211,31 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     public function testCanGetPropertyWithAnyCase()
     {
         $currency = coollect([
-            'BR' => [ 'symbol' => 'R$' ]
+            'BR' => [ 'symbol' => 'R$' ],
+            'kebab-case' => 'kebab cased',
         ]);
 
         $this->assertEquals('R$', $currency->br->symbol);
 
         $this->assertEquals('R$', $currency->BR->symbol);
+
+        $this->assertEquals('kebab cased', $currency->kebabCase);
+
+        $this->assertEquals('kebab cased', $currency->kebab_case);
+
+        $this->assertEquals('kebab cased', $currency['kebab-case']);
+
+        unset($currency['BR']);
+
+        $currency = $currency->flip();
+
+        $this->assertEquals('kebab-case', $currency->kebabCased);
+
+        $this->assertEquals('kebab-case', $currency->kebab_cased);
+
+        $this->assertEquals('kebab-case', $currency['kebab cased']);
+
+        $this->assertEquals($this->coollection->address->flip()->rio_de_janeiro, 'city');
     }
 
     /**

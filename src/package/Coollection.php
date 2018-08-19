@@ -255,17 +255,25 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      */
     private function getArrayKey($key)
     {
-        if (array_key_exists($key, $this->__toArray())) {
-            return $key;
-        }
+        $data = $this->__toArray();
 
-        $value = $this->keys()->mapWithKeys(function ($item) {
-            return [$this->snake($item) => $item];
-        })->get(lower($key));
+        $cases = [
+            $key,
+            $this->snakeCase($key),
+            lower($this->snakeCase($key)),
+            $this->camelCase($key),
+            $this->kebabCase($key),
+            lower($this->kebabCase($key)),
+            $this->stringCase($key),
+            lower($this->stringCase($key)),
+            lower($key),
+        ];
 
-        return is_null($value)
-            ? static::NOT_FOUND
-            : $value;
+        $data = $this->filter(function ($value,  $key) use ($cases) {
+            return array_search($key, $cases) !== false || array_search(lower($key), $cases) !== false;
+        })->keys()->first();
+
+        return is_string($data) ? $data : static::NOT_FOUND;
     }
 
     /**
@@ -274,13 +282,46 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      * @param $string
      * @return string
      */
-    public function snake($string)
+    public function snakeCase($string)
     {
-        if (ctype_upper($string)) {
-            return lower($string);
-        }
-
         return Str::snake($string);
+    }
+
+    /**
+     * Transform anything to string case.
+     *
+     * @param $string
+     * @return string
+     */
+    public function stringCase($string)
+    {
+        $string = $this->snakeCase($string);
+
+        return str_replace('_', ' ', $string);
+    }
+
+    /**
+     * Transform anything to kebab case.
+     *
+     * @param $string
+     * @return string
+     */
+    public function kebabCase($string)
+    {
+        return kebab_case(
+            $this->camelCase($string)
+        );
+    }
+
+    /**
+     * Transform anything to camel case.
+     *
+     * @param $string
+     * @return string
+     */
+    public function camelCase($string)
+    {
+        return camel_case($string);
     }
 
     /**
