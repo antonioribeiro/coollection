@@ -619,4 +619,17 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
     {
         return $this->items;
     }
+
+    /**
+     * Dynamically check a property exists on the underlying object.
+     *
+     * @param  mixed  $name
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        return isset($this->items[$name]);
+
+        return false;
+    }
 }
