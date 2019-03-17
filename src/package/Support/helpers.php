@@ -3,7 +3,7 @@
 use IlluminateAgnostic\Str\Support\Str;
 use PragmaRX\Coollection\Package\Coollection;
 
-if (! function_exists('coollect')) {
+if (!function_exists('coollect')) {
     /**
      * Create a collection from the given value.
      *
@@ -20,7 +20,7 @@ if (! function_exists('coollect')) {
     }
 }
 
-if (! function_exists('snake')) {
+if (!function_exists('snake')) {
     /**
      * Convert a string to snake case.
      *
@@ -34,7 +34,7 @@ if (! function_exists('snake')) {
     }
 }
 
-if (! function_exists('lower')) {
+if (!function_exists('lower')) {
     /**
      * Convert the given string to lower-case.
      *
@@ -47,7 +47,7 @@ if (! function_exists('lower')) {
     }
 }
 
-if (! function_exists('upper')) {
+if (!function_exists('upper')) {
     /**
      * Convert the given string to lower-case.
      *
@@ -63,7 +63,7 @@ if (! function_exists('upper')) {
 /**
  * @codeCoverageIgnore
  */
-if (! function_exists('dump')) {
+if (!function_exists('dump')) {
     function dump(...$args)
     {
         foreach ($args as $value) {
@@ -75,16 +75,16 @@ if (! function_exists('dump')) {
 /**
  * @codeCoverageIgnore
  */
-if (! function_exists('dd')) {
+if (!function_exists('dd')) {
     function dd(...$args)
     {
         dump(...$args);
 
-        die;
+        die();
     }
 }
 
-if (! function_exists('starts_with')) {
+if (!function_exists('starts_with')) {
     /**
      * Determine if a given string starts with a given substring.
      *
@@ -98,7 +98,7 @@ if (! function_exists('starts_with')) {
     }
 }
 
-if (! function_exists('array_sort_by_keys_recursive')) {
+if (!function_exists('array_sort_by_keys_recursive')) {
     /**
      * Determine if a given string starts with a given substring.
      *

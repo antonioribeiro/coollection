@@ -30,11 +30,17 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
                 'city' => 'New York',
             ],
             'skills' => [
-                'php' => [
-                    '5.6', '7.0', '7.1', '7.2'
-                ],
+                'php' => ['5.6', '7.0', '7.1', '7.2'],
                 'laravel' => [
-                    '3.2', '4.0', '4.2', '5.0', '5.1', '5.2', '5.3', '5.4', '5.5',
+                    '3.2',
+                    '4.0',
+                    '4.2',
+                    '5.0',
+                    '5.1',
+                    '5.2',
+                    '5.3',
+                    '5.4',
+                    '5.5',
                 ],
                 'photography' => [
                     'pro' => true,
@@ -45,12 +51,8 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
                     'nature' => false,
                 ],
             ],
-            'grades' => [
-                10, '9', 9, 10, 8, 6, 5
-            ],
-            'ages' => [
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 39
-            ],
+            'grades' => [10, '9', 9, 10, 8, 6, 5],
+            'ages' => [1, 2, 3, 4, 5, 6, 7, 8, 9, 39],
             'position' => 30,
             'both_have' => true,
             'spread' => [['John Doe', 35], ['Jane Doe', 33]],
@@ -65,23 +67,17 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
             'first_name' => 'Mary',
             'last_name' => 'Blood',
             'address' => [
-                'city' => 'Aruba'
+                'city' => 'Aruba',
             ],
             'skills' => [
-                'cinema' => [
-                    '1976'
-                ],
+                'cinema' => ['1976'],
             ],
-            'grades' => [
-                10, 10, 10, 1, 2, 3, 4, 5, 4, 4, 4, 4, 4, 4, 4, 4
-            ],
-            'ages' => [
-                20, 21, 22, 23, 24, 25
-            ],
+            'grades' => [10, 10, 10, 1, 2, 3, 4, 5, 4, 4, 4, 4, 4, 4, 4, 4],
+            'ages' => [20, 21, 22, 23, 24, 25],
             'position' => 40,
             'both_have' => true,
             'spread' => [['John Doe', 37], ['Jane Doe', 34]],
-        ]
+        ],
     ];
 
     const ACCOUNTING_GROUPED = [
@@ -89,9 +85,7 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
             ['account_id' => 'account-x10', 'product' => 'Chair'],
             ['account_id' => 'account-x10', 'product' => 'Bookcase'],
         ],
-        'account-x11' => [
-            ['account_id' => 'account-x11', 'product' => 'Desk'],
-        ],
+        'account-x11' => [['account_id' => 'account-x11', 'product' => 'Desk']],
     ];
 
     /**
@@ -126,11 +120,13 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     /**
      *
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->full = coollect(static::DATA);
 
-        $this->coollection = $this->full->where('last_name', 'Ribeiro')->first();
+        $this->coollection = $this->full
+            ->where('last_name', 'Ribeiro')
+            ->first();
 
         $this->array = $this->coollection->toArray();
     }
@@ -160,9 +156,15 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function wrapIfArrayable()
     {
-        $this->assertInstanceOf(Coollection::class, $this->coollection->get('skills'));
+        $this->assertInstanceOf(
+            Coollection::class,
+            $this->coollection->get('skills')
+        );
 
-        $this->assertInstanceOf(Coollection::class, $this->coollection->get('skills')->photography);
+        $this->assertInstanceOf(
+            Coollection::class,
+            $this->coollection->get('skills')->photography
+        );
     }
 
     public function testInstantiation()
@@ -172,18 +174,30 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testObjectifiedProperties()
     {
-        $this->assertEquals($this->coollection->first_name, $this->array['first_name']);
+        $this->assertEquals(
+            $this->coollection->first_name,
+            $this->array['first_name']
+        );
 
-        $this->assertEquals($this->coollection->last_name, $this->array['last_name']);
+        $this->assertEquals(
+            $this->coollection->last_name,
+            $this->array['last_name']
+        );
 
-        $this->assertEquals($this->coollection->address->city, $this->array['address']['city']);
+        $this->assertEquals(
+            $this->coollection->address->city,
+            $this->array['address']['city']
+        );
     }
 
     public function testWrap()
     {
         $c = $this->coollection->wrap($this->array);
 
-        $this->assertEquals($c->wrap($c)->address->city, $this->array['address']['city']);
+        $this->assertEquals(
+            $c->wrap($c)->address->city,
+            $this->array['address']['city']
+        );
     }
 
     public function testUnwrap()
@@ -195,7 +209,10 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testMake()
     {
-        $this->assertInstanceOf(Coollection::class, $c = $this->coollection->make($this->array));
+        $this->assertInstanceOf(
+            Coollection::class,
+            $c = $this->coollection->make($this->array)
+        );
 
         $this->assertEquals($c->address->city, $this->array['address']['city']);
     }
@@ -206,9 +223,12 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($c->all()->toArray(), [1, 2]);
 
-        $this->assertInstanceOf(Coollection::class, $c->map(function ($item) {
-            return $item;
-        }));
+        $this->assertInstanceOf(
+            Coollection::class,
+            $c->map(function ($item) {
+                return $item;
+            })
+        );
     }
 
     public function testAll()
@@ -228,17 +248,32 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testMode()
     {
-        $this->assertEquals([10, 9], $this->coollection->grades->mode()->flatten()->toArray());
+        $this->assertEquals(
+            [10, 9],
+            $this->coollection->grades
+                ->mode()
+                ->flatten()
+                ->toArray()
+        );
     }
 
     public function testCollapse()
     {
-        $this->assertEquals($this->coollection->skills->collapse()->toArray(), array_merge($this->array['skills']['php'], $this->array['skills']['laravel'], $this->array['skills']['photography']));
+        $this->assertEquals(
+            $this->coollection->skills->collapse()->toArray(),
+            array_merge(
+                $this->array['skills']['php'],
+                $this->array['skills']['laravel'],
+                $this->array['skills']['photography']
+            )
+        );
     }
 
     public function testContains()
     {
-        $this->assertTrue($this->coollection->skills->contains($this->array['skills']['php']));
+        $this->assertTrue(
+            $this->coollection->skills->contains($this->array['skills']['php'])
+        );
 
         $this->assertFalse($this->coollection->skills->contains('rails'));
 
@@ -256,45 +291,65 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testCrossJoin()
     {
-        $this->assertInstanceOf(Coollection::class, $this->coollection->skills->crossJoin($this->coollection->grades));
+        $this->assertInstanceOf(
+            Coollection::class,
+            $this->coollection->skills->crossJoin($this->coollection->grades)
+        );
     }
 
     public function testDiff()
     {
-        $this->assertInstanceOf(Coollection::class, $this->coollection->grades->diff($this->coollection->ages));
+        $this->assertInstanceOf(
+            Coollection::class,
+            $this->coollection->grades->diff($this->coollection->ages)
+        );
     }
 
     public function testDiffAssoc()
     {
-        $this->assertInstanceOf(Coollection::class, $this->coollection->diffAssoc($this->coollection->skills));
+        $this->assertInstanceOf(
+            Coollection::class,
+            $this->coollection->diffAssoc($this->coollection->skills)
+        );
     }
 
     public function testDiffKeys()
     {
-        $this->assertInstanceOf(Coollection::class, $this->coollection->diffKeys($this->coollection->skills));
+        $this->assertInstanceOf(
+            Coollection::class,
+            $this->coollection->diffKeys($this->coollection->skills)
+        );
     }
 
     public function testEach()
     {
-        $this->assertInstanceOf(Coollection::class, $this->coollection->skills->each(function ($item) {
-            $this->assertInstanceOf(Coollection::class, $item);
+        $this->assertInstanceOf(
+            Coollection::class,
+            $this->coollection->skills->each(function ($item) {
+                $this->assertInstanceOf(Coollection::class, $item);
 
-            return $item;
-        }));
+                return $item;
+            })
+        );
     }
 
     public function testEachSpread()
     {
-        $this->assertInstanceOf(Coollection::class, $this->coollection->spread->eachSpread(function ($field, $name) {
-            return true;
-        }));
+        $this->assertInstanceOf(
+            Coollection::class,
+            $this->coollection->spread->eachSpread(function ($field, $name) {
+                return true;
+            })
+        );
     }
 
     public function testEvery()
     {
-        $this->assertTrue($this->coollection->skills->every(function () {
-            return true;
-        }));
+        $this->assertTrue(
+            $this->coollection->skills->every(function () {
+                return true;
+            })
+        );
     }
 
     public function testExcept()
@@ -303,7 +358,10 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
         unset($compare['php']);
 
-        $this->assertEquals($this->coollection->skills->except(['php'])->toArray(), $compare);
+        $this->assertEquals(
+            $this->coollection->skills->except(['php'])->toArray(),
+            $compare
+        );
     }
 
     public function testFilter()
@@ -348,7 +406,10 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     public function testWhere()
     {
         $this->assertEquals(
-            $this->full->where('last_name', 'Ribeiro')->first()->skills->laravel->toArray(),
+            $this->full
+                ->where('last_name', 'Ribeiro')
+                ->first()
+                ->skills->laravel->toArray(),
             $this->array['skills']['laravel']
         );
     }
@@ -427,10 +488,18 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testFlip()
     {
-        $this->assertEquals($this->coollection->address->flip()->rio_de_janeiro, 'city');
-        $this->assertEquals($this->coollection->address->flip()->rio_de_janeiro, 'city');
+        $this->assertEquals(
+            $this->coollection->address->flip()->rio_de_janeiro,
+            'city'
+        );
+        $this->assertEquals(
+            $this->coollection->address->flip()->rio_de_janeiro,
+            'city'
+        );
 
-        $collection = new Coollection([$column = 'first_name' => $name = 'Barak Obama']);
+        $collection = new Coollection([
+            ($column = 'first_name') => ($name = 'Barak Obama'),
+        ]);
 
         $this->assertEquals($collection->first_name, $name);
 
@@ -448,7 +517,10 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testGet()
     {
-        $this->assertEquals($this->coollection->address->get('city'), $this->array['address']['city']);
+        $this->assertEquals(
+            $this->coollection->address->get('city'),
+            $this->array['address']['city']
+        );
     }
 
     public function testGetException()
@@ -464,9 +536,15 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testGetNotFound()
     {
-        $this->assertEquals('Rio de Janeiro', $this->coollection->get('address.city'));
+        $this->assertEquals(
+            'Rio de Janeiro',
+            $this->coollection->get('address.city')
+        );
 
-        $this->assertInstanceOf(Coollection::class, $this->coollection->get('address'));
+        $this->assertInstanceOf(
+            Coollection::class,
+            $this->coollection->get('address')
+        );
     }
 
     public function testGetNoExceptionOnNull()
@@ -480,7 +558,10 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testGroupBy()
     {
-        $this->assertInstanceOf(Coollection::class, $c = $this->coollection->accounting->groupBy('account_id'));
+        $this->assertInstanceOf(
+            Coollection::class,
+            $c = $this->coollection->accounting->groupBy('account_id')
+        );
 
         $this->assertEquals($c->toArray(), static::ACCOUNTING_GROUPED);
     }
@@ -489,10 +570,15 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             $this->coollection->accounting->keyBy('account_id')->toArray(),
-            (new IlluminateExtractedCollection($this->coollection->accounting))->keyBy('account_id')->toArray()
+            (new IlluminateExtractedCollection($this->coollection->accounting))
+                ->keyBy('account_id')
+                ->toArray()
         );
 
-        $this->assertInstanceOf(Coollection::class, $this->coollection->accounting->keyBy('account_id'));
+        $this->assertInstanceOf(
+            Coollection::class,
+            $this->coollection->accounting->keyBy('account_id')
+        );
     }
 
     public function testHas()
@@ -502,7 +588,10 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testImplode()
     {
-        $this->assertEquals($this->coollection->accounting->implode('product', '-'), "Chair-Bookcase-Desk");
+        $this->assertEquals(
+            $this->coollection->accounting->implode('product', '-'),
+            'Chair-Bookcase-Desk'
+        );
     }
 
     public function testIntersect()
@@ -511,10 +600,7 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
         $tco = $values->toArray();
 
-        $this->assertEquals(
-            $values->intersect($tco)->toArray(),
-            $tco
-        );
+        $this->assertEquals($values->intersect($tco)->toArray(), $tco);
 
         $this->assertInstanceOf(Coollection::class, $values->intersect($tco));
     }
@@ -525,19 +611,14 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
         $tco = $values->toArray();
 
-        $this->assertEquals(
-            $values->intersectByKeys($tco)->toArray(),
-            $tco
-        );
+        $this->assertEquals($values->intersectByKeys($tco)->toArray(), $tco);
 
         $this->assertInstanceOf(Coollection::class, $values->intersect($tco));
     }
 
     public function testEmptyNotEmpty()
     {
-        $this->assertFalse(
-            $this->coollection->address->isEmpty()
-        );
+        $this->assertFalse($this->coollection->address->isEmpty());
 
         $this->assertTrue($this->coollection->address->isNotEmpty());
 
@@ -546,47 +627,72 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertTrue(
-            $this->coollection->address->forget('city')->forget('street')->isEmpty()
+            $this->coollection->address
+                ->forget('city')
+                ->forget('street')
+                ->isEmpty()
         );
 
         $this->assertFalse(
-            $this->coollection->address->forget('city')->forget('street')->isNotEmpty()
+            $this->coollection->address
+                ->forget('city')
+                ->forget('street')
+                ->isNotEmpty()
         );
     }
 
     public function testKeys()
     {
-        $this->assertEquals($this->coollection->skills->keys()->toArray(), ['php', 'laravel', 'photography']);
+        $this->assertEquals($this->coollection->skills->keys()->toArray(), [
+            'php',
+            'laravel',
+            'photography',
+        ]);
 
-        $this->assertInstanceOf(Coollection::class, $this->coollection->skills->keys());
+        $this->assertInstanceOf(
+            Coollection::class,
+            $this->coollection->skills->keys()
+        );
     }
 
     public function testLast()
     {
-        $this->assertEquals('Praia de Copacabana', $this->coollection->address->last());
+        $this->assertEquals(
+            'Praia de Copacabana',
+            $this->coollection->address->last()
+        );
 
         $this->assertEquals(false, $this->coollection->skills->last()->nature);
 
-        $this->assertEquals(true, $this->coollection->skills->last()->landscape);
+        $this->assertEquals(
+            true,
+            $this->coollection->skills->last()->landscape
+        );
 
-        $this->assertInstanceOf(Coollection::class, $this->coollection->skills->last());
+        $this->assertInstanceOf(
+            Coollection::class,
+            $this->coollection->skills->last()
+        );
     }
 
     public function testPluck()
     {
         $this->assertEquals(
-            ["Chair", "Bookcase", "Desk"],
+            ['Chair', 'Bookcase', 'Desk'],
             $this->coollection->accounting->pluck('product')->toArray()
         );
     }
 
     public function testMap()
     {
-        $c = $this->coollection->skills->map(function ($item) {
-            $this->assertInstanceOf(Coollection::class, $item);
+        $c = $this->coollection->skills
+            ->map(function ($item) {
+                $this->assertInstanceOf(Coollection::class, $item);
 
-            return 'mapped';
-        })->flatten()->values();
+                return 'mapped';
+            })
+            ->flatten()
+            ->values();
 
         $this->assertEquals(['mapped', 'mapped', 'mapped'], $c->toArray());
 
@@ -610,8 +716,9 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(Coollection::class, $sequence);
     }
 
-    public function testMapToDictionary() // TODO --- broken
+    public function testMapToDictionary()
     {
+        // TODO --- broken
         $data = new Coollection([
             ['id' => 1, 'name' => 'A'],
             ['id' => 2, 'name' => 'B'],
@@ -622,8 +729,11 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
             return [$item['name'] => $item['id']];
         });
         $this->assertInstanceOf(Coollection::class, $groups);
-        $this->assertEquals(['A' => [1], 'B' => [2, 4], 'C' => [3]], $groups->toArray());
-        $this->assertInternalType('array', $groups->toArray()['A']);
+        $this->assertEquals(
+            ['A' => [1], 'B' => [2, 4], 'C' => [3]],
+            $groups->toArray()
+        );
+        $this->assertIsArray($groups->toArray()['A']);
 
         $this->assertInstanceOf(Coollection::class, $groups);
     }
@@ -636,13 +746,8 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             [
-                "account-x10" => [
-                    "Chair",
-                    "Bookcase",
-                ],
-                "account-x11" => [
-                    "Desk",
-                ],
+                'account-x10' => ['Chair', 'Bookcase'],
+                'account-x11' => ['Desk'],
             ],
             $c->toArray()
         );
@@ -658,7 +763,10 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             ['Chair', 'Bookcase', 'Desk'],
-            $c->flatten()->values()->toArray()
+            $c
+                ->flatten()
+                ->values()
+                ->toArray()
         );
 
         $this->assertInstanceOf(Coollection::class, $c);
@@ -692,7 +800,10 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             ['Chair', 'Bookcase', 'Desk'],
-            $c->flatten()->values()->toArray()
+            $c
+                ->flatten()
+                ->values()
+                ->toArray()
         );
 
         $this->assertInstanceOf(Coollection::class, $c);
@@ -717,19 +828,21 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     public function testMerge()
     {
         $result = [
-            0 => "5.6",
-            1 => "7.0",
-            2 => "7.1",
-            3 => "7.2",
-            "pro" => true,
-            "landscape" => true,
-            "concerts" => true,
-            "wedding" => true,
-            "studio" => true,
-            "nature" => false,
+            0 => '5.6',
+            1 => '7.0',
+            2 => '7.1',
+            3 => '7.2',
+            'pro' => true,
+            'landscape' => true,
+            'concerts' => true,
+            'wedding' => true,
+            'studio' => true,
+            'nature' => false,
         ];
 
-        $c = $this->coollection->skills->php->merge($this->coollection->skills->photography);
+        $c = $this->coollection->skills->php->merge(
+            $this->coollection->skills->photography
+        );
 
         $this->assertEquals($result, $c->toArray());
 
@@ -740,10 +853,12 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     {
         $result = [
             'John Doe' => 'Jane Doe',
-            35 => 33
+            35 => 33,
         ];
 
-        $c = $this->coollection->spread->first()->combine($this->coollection->spread->last());
+        $c = $this->coollection->spread
+            ->first()
+            ->combine($this->coollection->spread->last());
 
         $this->assertEquals($result, $c->toArray());
 
@@ -753,10 +868,20 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     public function testUnion()
     {
         $result = [
-            '5.6', '7.0', '7.1', '7.2', '5.1', '5.2', '5.3', '5.4', '5.5',
+            '5.6',
+            '7.0',
+            '7.1',
+            '7.2',
+            '5.1',
+            '5.2',
+            '5.3',
+            '5.4',
+            '5.5',
         ];
 
-        $c = $this->coollection->skills->php->union($this->coollection->skills->laravel);
+        $c = $this->coollection->skills->php->union(
+            $this->coollection->skills->laravel
+        );
 
         $this->assertEquals($result, $c->toArray());
 
@@ -797,13 +922,22 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testPartition()
     {
-        list($belowFive, $aboveFive) = $this->coollection->skills->laravel->partition(function ($i) {
+        list(
+            $belowFive,
+            $aboveFive,
+        ) = $this->coollection->skills->laravel->partition(function ($i) {
             return $i < '4.9';
         });
 
-        $this->assertEquals(['3.2', '4.0', '4.2'], $belowFive->flatten()->toArray());
+        $this->assertEquals(
+            ['3.2', '4.0', '4.2'],
+            $belowFive->flatten()->toArray()
+        );
 
-        $this->assertEquals(['5.0', '5.1', '5.2', '5.3', '5.4', '5.5'], $aboveFive->flatten()->toArray());
+        $this->assertEquals(
+            ['5.0', '5.1', '5.2', '5.3', '5.4', '5.5'],
+            $aboveFive->flatten()->toArray()
+        );
 
         $this->assertInstanceOf(Coollection::class, $belowFive);
 
@@ -812,9 +946,12 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testPipe()
     {
-        $this->assertEquals('piped', $this->coollection->skills->laravel->pipe(function () {
-            return 'piped';
-        }));
+        $this->assertEquals(
+            'piped',
+            $this->coollection->skills->laravel->pipe(function () {
+                return 'piped';
+            })
+        );
     }
 
     public function testPop()
@@ -826,7 +963,13 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     {
         $c = $this->coollection->skills->laravel->prepend(['bash' => 'all']);
 
-        $this->assertEquals('all', $c->first()->flatten()->toArray()[0]);
+        $this->assertEquals(
+            'all',
+            $c
+                ->first()
+                ->flatten()
+                ->toArray()[0]
+        );
 
         $this->assertInstanceOf(Coollection::class, $c);
     }
@@ -844,7 +987,9 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testConcat()
     {
-        $c = $this->coollection->address->values()->concat($this->coollection->other_address->values());
+        $c = $this->coollection->address
+            ->values()
+            ->concat($this->coollection->other_address->values());
 
         $concat = [
             'Rio de Janeiro',
@@ -863,7 +1008,15 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $laravel = $this->coollection->skills->pull('laravel');
 
         $pulled = [
-            '3.2', '4.0', '4.2', '5.0', '5.1', '5.2', '5.3', '5.4', '5.5',
+            '3.2',
+            '4.0',
+            '4.2',
+            '5.0',
+            '5.1',
+            '5.2',
+            '5.3',
+            '5.4',
+            '5.5',
         ];
 
         $this->assertEquals($laravel->toArray(), $pulled);
@@ -916,14 +1069,23 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     {
         $c = $this->coollection->skills->reverse();
 
-        $this->assertEquals(['photography', 'laravel', 'php'], $c->keys()->flatten()->toArray());
+        $this->assertEquals(
+            ['photography', 'laravel', 'php'],
+            $c
+                ->keys()
+                ->flatten()
+                ->toArray()
+        );
 
         $this->assertInstanceOf(Coollection::class, $c);
     }
 
     public function testSearch()
     {
-        $this->assertEquals(2, $this->coollection->skills->laravel->search('4.2', true));
+        $this->assertEquals(
+            2,
+            $this->coollection->skills->laravel->search('4.2', true)
+        );
     }
 
     public function testShift()
@@ -936,7 +1098,6 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertInstanceOf(Coollection::class, $c);
 
-
         $c = $this->coollection->skills;
 
         $php = $c->shift();
@@ -948,7 +1109,10 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testShuffle()
     {
-        $this->assertInstanceOf(Coollection::class, $this->coollection->skills->shuffle());
+        $this->assertInstanceOf(
+            Coollection::class,
+            $this->coollection->skills->shuffle()
+        );
     }
 
     public function testSlice()
@@ -964,9 +1128,15 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     {
         $c = $this->coollection->skills->laravel->split(2);
 
-        $this->assertEquals(['3.2', '4.0', '4.2', '5.0', '5.1'], $c[0]->flatten()->toArray());
+        $this->assertEquals(
+            ['3.2', '4.0', '4.2', '5.0', '5.1'],
+            $c[0]->flatten()->toArray()
+        );
 
-        $this->assertEquals(['5.2', '5.3', '5.4', '5.5'], $c[1]->flatten()->toArray());
+        $this->assertEquals(
+            ['5.2', '5.3', '5.4', '5.5'],
+            $c[1]->flatten()->toArray()
+        );
 
         $this->assertInstanceOf(Coollection::class, $c);
     }
@@ -975,7 +1145,10 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     {
         $c = $this->coollection->skills->laravel->chunk(5);
 
-        $this->assertEquals(['3.2', '4.0', '4.2', '5.0', '5.1'], $c[0]->flatten()->toArray());
+        $this->assertEquals(
+            ['3.2', '4.0', '4.2', '5.0', '5.1'],
+            $c[0]->flatten()->toArray()
+        );
 
         $this->assertInstanceOf(Coollection::class, $c);
     }
@@ -984,27 +1157,40 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     {
         $c = $this->coollection->grades->sort();
 
-        $this->assertEquals([5,6,8,9,9,10,10], $c->flatten()->toArray());
+        $this->assertEquals([5, 6, 8, 9, 9, 10, 10], $c->flatten()->toArray());
 
         $this->assertInstanceOf(Coollection::class, $c);
     }
 
     public function testSortBy()
     {
-        $this->assertEquals(['Chair', 'Bookcase', 'Desk'], $this->coollection->accounting->pluck('product')->toArray());
+        $this->assertEquals(
+            ['Chair', 'Bookcase', 'Desk'],
+            $this->coollection->accounting->pluck('product')->toArray()
+        );
 
-        $c = $this->coollection->accounting->sortBy('product')->pluck('product');
+        $c = $this->coollection->accounting
+            ->sortBy('product')
+            ->pluck('product');
 
-        $this->assertEquals(['Bookcase', 'Chair', 'Desk'], $c->flatten()->toArray());
+        $this->assertEquals(
+            ['Bookcase', 'Chair', 'Desk'],
+            $c->flatten()->toArray()
+        );
 
         $this->assertInstanceOf(Coollection::class, $c);
     }
 
     public function testSortByDesc()
     {
-        $c = $this->coollection->accounting->sortByDesc('product')->pluck('product');
+        $c = $this->coollection->accounting
+            ->sortByDesc('product')
+            ->pluck('product');
 
-        $this->assertEquals(['Desk', 'Chair', 'Bookcase'], $c->flatten()->toArray());
+        $this->assertEquals(
+            ['Desk', 'Chair', 'Bookcase'],
+            $c->flatten()->toArray()
+        );
 
         $this->assertInstanceOf(Coollection::class, $c);
     }
@@ -1013,7 +1199,10 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     {
         $c = $this->coollection->skills->laravel->splice(5);
 
-        $this->assertEquals(['5.2', '5.3', '5.4', '5.5'], $c->flatten()->toArray());
+        $this->assertEquals(
+            ['5.2', '5.3', '5.4', '5.5'],
+            $c->flatten()->toArray()
+        );
 
         $this->assertInstanceOf(Coollection::class, $c);
     }
@@ -1038,14 +1227,19 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
             return $collection;
         });
 
-        $this->assertEquals($this->array['skills']['laravel'], $c->flatten()->toArray());
+        $this->assertEquals(
+            $this->array['skills']['laravel'],
+            $c->flatten()->toArray()
+        );
 
         $this->assertInstanceOf(Coollection::class, $c);
     }
 
     public function testTransform()
     {
-        $c = $this->coollection->skills->laravel->transform(function ($collection) {
+        $c = $this->coollection->skills->laravel->transform(function (
+            $collection
+        ) {
             return $collection;
         });
 
@@ -1098,10 +1292,12 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             [
-                ["Rio de Janeiro", "New York"],
-                ["Praia de Copacabana", "5th Avenue"]
+                ['Rio de Janeiro', 'New York'],
+                ['Praia de Copacabana', '5th Avenue'],
             ],
-            $this->coollection->address->zip($this->coollection->other_address)->toArray()
+            $this->coollection->address
+                ->zip($this->coollection->other_address)
+                ->toArray()
         );
     }
 
@@ -1116,24 +1312,36 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testJsonSerialize()
     {
-        $this->assertEquals(json_encode(["5.6","7.0","7.1","7.2"]), json_encode($this->coollection->skills->php->jsonSerialize()));
+        $this->assertEquals(
+            json_encode(['5.6', '7.0', '7.1', '7.2']),
+            json_encode($this->coollection->skills->php->jsonSerialize())
+        );
     }
 
     public function testToJson()
     {
-        $this->assertEquals('["5.6","7.0","7.1","7.2"]', $this->coollection->skills->php->toJson());
+        $this->assertEquals(
+            '["5.6","7.0","7.1","7.2"]',
+            $this->coollection->skills->php->toJson()
+        );
     }
 
     public function testToArray()
     {
-        $this->assertEquals(["5.6","7.0","7.1","7.2"], $this->coollection->skills->php->toArray());
+        $this->assertEquals(
+            ['5.6', '7.0', '7.1', '7.2'],
+            $this->coollection->skills->php->toArray()
+        );
     }
 
     public function testToCannotCreateCoolectionOfCoolection()
     {
         $a = ['a' => 2, 'b' => 3];
 
-        $this->assertEquals($a, (new Coollection(new Coollection($a)))->toArray());
+        $this->assertEquals(
+            $a,
+            (new Coollection(new Coollection($a)))->toArray()
+        );
     }
 
     public function testOverwrite()
@@ -1154,7 +1362,12 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
             'c' => 4,
         ];
 
-        $this->assertEquals($c, coollect($a)->overwrite($b)->toArray());
+        $this->assertEquals(
+            $c,
+            coollect($a)
+                ->overwrite($b)
+                ->toArray()
+        );
 
         $a = [
             'a' => 2,
@@ -1180,7 +1393,7 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
             'e' => [
                 'f' => [
                     'g' => [
-                        'k' => 9
+                        'k' => 9,
                     ],
                 ],
             ],
@@ -1199,19 +1412,24 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
             'e' => [
                 'f' => [
                     'g' => [
-                        'k' => 9
+                        'k' => 9,
                     ],
                 ],
             ],
         ];
 
-        $this->assertEquals($c, coollect($a)->overwrite($b)->toArray());
+        $this->assertEquals(
+            $c,
+            coollect($a)
+                ->overwrite($b)
+                ->toArray()
+        );
     }
 
     public function testCanGetPropertyWithAnyCase()
     {
         $currency = coollect([
-            'BR' => [ 'symbol' => 'R$' ],
+            'BR' => ['symbol' => 'R$'],
             'kebab-case' => 'kebab cased',
         ]);
 
@@ -1235,7 +1453,10 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('kebab-case', $currency['kebab cased']);
 
-        $this->assertEquals($this->coollection->address->flip()->rio_de_janeiro, 'city');
+        $this->assertEquals(
+            $this->coollection->address->flip()->rio_de_janeiro,
+            'city'
+        );
     }
 
     /**
@@ -1244,7 +1465,7 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     public function testCanGetDottedProperties()
     {
         $currency = coollect([
-            'BR' => [ 'symbol' => 'R$' ]
+            'BR' => ['symbol' => 'R$'],
         ]);
 
         $this->assertEquals('R$', $currency->br->symbol);
@@ -1261,15 +1482,21 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('laravel_framework', snake('LaravelFramework'));
 
-        $this->assertEquals('LARAVEL FRAMEWORK É A MELHOR', upper('laravel framework é a melhor'));
+        $this->assertEquals(
+            'LARAVEL FRAMEWORK É A MELHOR',
+            upper('laravel framework é a melhor')
+        );
 
-        $this->assertEquals('laravel framework é a melhor', lower('LARAVEL FRAMEWORK É A MELHOR'));
+        $this->assertEquals(
+            'laravel framework é a melhor',
+            lower('LARAVEL FRAMEWORK É A MELHOR')
+        );
 
         $this->assertEquals(true, starts_with('laravel framework', 'l'));
 
         $this->assertEquals(false, starts_with('Laravel framework', 'l'));
 
-        $c = (new Coollection($array = ['laravel framework']));
+        $c = new Coollection(($array = ['laravel framework']));
 
         $this->assertEquals($c->first(), coollect($c->toArray())->first());
 
@@ -1282,47 +1509,79 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
             return 'macro is working';
         });
 
-        $this->assertEquals('macro is working', Coollection::testMacro('is it?'));
-        $this->assertEquals('macro is working', coollect()->testMacro('is it?'));
+        $this->assertEquals(
+            'macro is working',
+            Coollection::testMacro('is it?')
+        );
+        $this->assertEquals(
+            'macro is working',
+            coollect()->testMacro('is it?')
+        );
 
         Coollection::macro('testMacroLower', 'lower');
 
-        $this->assertEquals('macro is lower', Coollection::testMacroLower('MACRO IS LOWER'));
-        $this->assertEquals('macro is lower', coollect()->testMacroLower('MACRO IS LOWER'));
+        $this->assertEquals(
+            'macro is lower',
+            Coollection::testMacroLower('MACRO IS LOWER')
+        );
+        $this->assertEquals(
+            'macro is lower',
+            coollect()->testMacroLower('MACRO IS LOWER')
+        );
 
-        Coollection::mixin($mixin = new class() {
-            public function testMacroUpper()
-            {
-                return function () {
-                    return 'MACRO IS UPPER';
-                };
+        Coollection::mixin(
+            $mixin = new class {
+                public function testMacroUpper()
+                {
+                    return function () {
+                        return 'MACRO IS UPPER';
+                    };
+                }
             }
-        });
+        );
 
-        $this->assertEquals('MACRO IS UPPER', coollect()->testMacroUpper('macro is upper'));
+        $this->assertEquals(
+            'MACRO IS UPPER',
+            coollect()->testMacroUpper('macro is upper')
+        );
 
         $this->expectException(BadMethodCallException::class);
 
-        $this->assertEquals('macro is lower', Coollection::testMacroDoesNotExists());
+        $this->assertEquals(
+            'macro is lower',
+            Coollection::testMacroDoesNotExists()
+        );
     }
 
     public function testCollectionExcept()
     {
-        $this->assertSame(['a', 'c'], collect(['a', 'b', 'c'])->except(1)->values()->toArray());
+        $this->assertSame(
+            ['a', 'c'],
+            collect(['a', 'b', 'c'])
+                ->except(1)
+                ->values()
+                ->toArray()
+        );
 
-        $this->assertSame(['a', 'c'], collect(['a', 'b', 'c'])->except(collect([1]))->values()->toArray());
+        $this->assertSame(
+            ['a', 'c'],
+            collect(['a', 'b', 'c'])
+                ->except(collect([1]))
+                ->values()
+                ->toArray()
+        );
     }
 
     public function testIsEmpty()
     {
-        $this->assertFalse(coollect([1,2,3,4])->isEmpty());
+        $this->assertFalse(coollect([1, 2, 3, 4])->isEmpty());
 
         $this->assertTrue(coollect([])->isEmpty());
     }
 
     public function testIsCount()
     {
-        $this->assertEquals(4, coollect([1,2,3,4])->count());
+        $this->assertEquals(4, coollect([1, 2, 3, 4])->count());
 
         $this->assertEquals(0, coollect([])->count());
     }
@@ -1343,7 +1602,10 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testNonArrayable()
     {
-        $this->assertEquals($string = 'not an array', $this->coollection->__toArray($string));
+        $this->assertEquals(
+            $string = 'not an array',
+            $this->coollection->__toArray($string)
+        );
     }
 
     public function testArrayAccess()
@@ -1378,30 +1640,39 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
         $collection = coollect([$person1, $person2]);
 
-        $this->assertEquals(['Taylor', 'Yaz'], $collection->map->name->toArray());
+        $this->assertEquals(
+            ['Taylor', 'Yaz'],
+            $collection->map->name->toArray()
+        );
 
-        $collection = coollect([new TestSupportCollectionHigherOrderItem, new TestSupportCollectionHigherOrderItem]);
+        $collection = coollect([
+            new TestSupportCollectionHigherOrderItem(),
+            new TestSupportCollectionHigherOrderItem(),
+        ]);
 
-        $this->assertEquals(['TAYLOR', 'TAYLOR'], $collection->each->uppercase()->map->name->toArray());
+        $this->assertEquals(
+            ['TAYLOR', 'TAYLOR'],
+            $collection->each->uppercase()->map->name->toArray()
+        );
     }
 
     public function testGetArrayableItems()
     {
-        $coollection = new Coollection;
+        $coollection = new Coollection();
 
         $class = new ReflectionClass($coollection);
         $method = $class->getMethod('getArrayableItems');
         $method->setAccessible(true);
 
-        $items = new TestArrayableObject;
+        $items = new TestArrayableObject();
         $array = $method->invokeArgs($coollection, [$items]);
         $this->assertSame(['foo' => 'bar'], $array);
 
-        $items = new TestJsonableObject;
+        $items = new TestJsonableObject();
         $array = $method->invokeArgs($coollection, [$items]);
         $this->assertSame(['foo' => 'bar'], $array);
 
-        $items = new TestJsonSerializeObject;
+        $items = new TestJsonSerializeObject();
         $array = $method->invokeArgs($coollection, [$items]);
         $this->assertSame(['foo' => 'bar'], $array);
 
@@ -1424,14 +1695,23 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testSortByKeysRecursive()
     {
-        $this->assertEquals(['street', 'city'], $this->coollection->inverted_address->keys()->toArray());
+        $this->assertEquals(
+            ['street', 'city'],
+            $this->coollection->inverted_address->keys()->toArray()
+        );
 
-        $this->assertEquals(['city', 'street'], $this->coollection->sortByKeysRecursive()->inverted_address->keys()->toArray());
+        $this->assertEquals(
+            ['city', 'street'],
+            $this->coollection
+                ->sortByKeysRecursive()
+                ->inverted_address->keys()
+                ->toArray()
+        );
     }
 
     public function testTraversable()
     {
-        $c = new Coollection([1,2,3,4]);
+        $c = new Coollection([1, 2, 3, 4]);
 
         $sum = 0;
 
@@ -1451,27 +1731,27 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
         $big->mapWithKeys(function ($data, $key) {
             return [$key => $data];
         });
-        $this->assertLessThan(.003, $this->timerStop());
+        $this->assertLessThan(0.003, $this->timerStop());
 
         $this->timerStart();
         $big->toArray();
-        $this->assertLessThan(.003, $this->timerStop());
+        $this->assertLessThan(0.003, $this->timerStop());
 
         $this->timerStart();
         $big->where('id', 23000);
-        $this->assertLessThan(.003, $this->timerStop());
+        $this->assertLessThan(0.003, $this->timerStop());
 
         $this->timerStart();
         $big->wrap($big->toArray());
-        $this->assertLessThan(.003, $this->timerStop());
+        $this->assertLessThan(0.003, $this->timerStop());
 
         $this->timerStart();
         $big->isEmpty();
-        $this->assertLessThan(.003, $this->timerStop());
+        $this->assertLessThan(0.003, $this->timerStop());
 
         $this->timerStart();
         $big->count();
-        $this->assertLessThan(.003, $this->timerStop());
+        $this->assertLessThan(0.003, $this->timerStop());
     }
 
     public function testClosureInsideCoollection()
@@ -1501,7 +1781,13 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
             },
         ]);
 
-        $this->assertEquals(['a', 'b', 'c', 'f'], $coollection->sortByKey()->keys()->toArray());
+        $this->assertEquals(
+            ['a', 'b', 'c', 'f'],
+            $coollection
+                ->sortByKey()
+                ->keys()
+                ->toArray()
+        );
     }
 
     public function testSortByKeyRecursive()
@@ -1528,7 +1814,12 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($b, coollect($a)->sortByKeysRecursive()->toArray());
+        $this->assertEquals(
+            $b,
+            coollect($a)
+                ->sortByKeysRecursive()
+                ->toArray()
+        );
     }
 }
 

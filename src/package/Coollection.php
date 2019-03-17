@@ -17,7 +17,13 @@ use IlluminateAgnostic\Collection\Contracts\Support\Arrayable;
 use IlluminateAgnostic\Collection\Support\HigherOrderCollectionProxy;
 use IlluminateAgnostic\Collection\Support\Collection as TightencoCollect;
 
-class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregate, Jsonable, JsonSerializable
+class Coollection implements
+    ArrayAccess,
+    Arrayable,
+    Countable,
+    IteratorAggregate,
+    Jsonable,
+    JsonSerializable
 {
     use Macroable {
         __call as __callMacro;
@@ -48,8 +54,21 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      * @var array
      */
     protected static $proxies = [
-        'average', 'avg', 'contains', 'each', 'every', 'filter', 'first', 'flatMap',
-        'keyBy', 'map', 'partition', 'reject', 'sortBy', 'sortByDesc', 'sum',
+        'average',
+        'avg',
+        'contains',
+        'each',
+        'every',
+        'filter',
+        'first',
+        'flatMap',
+        'keyBy',
+        'map',
+        'partition',
+        'reject',
+        'sortBy',
+        'sortByDesc',
+        'sum',
     ];
 
     /**
@@ -57,9 +76,7 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      *
      * @var array
      */
-    protected static $returnArray = [
-        'toArray', 'jsonSerialize', 'unwrap',
-    ];
+    protected static $returnArray = ['toArray', 'jsonSerialize', 'unwrap'];
 
     /**
      * Cache __toArray results.
@@ -103,12 +120,16 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      */
     public function call($name, $arguments = [])
     {
-        return $this->runViaLaravelCollection(function ($collection) use ($name, $arguments) {
+        return $this->runViaLaravelCollection(function ($collection) use (
+            $name,
+            $arguments
+        ) {
             return call_user_func_array(
                 [$collection, $name],
                 $this->coollectizeCallbacks($this->__toArray($arguments), $name)
             );
-        }, $name);
+        },
+        $name);
     }
 
     /**
@@ -121,7 +142,7 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
     {
         $value = is_null($value) ? $this->items : $value;
 
-        if (! $this->isArrayable($value)) {
+        if (!$this->isArrayable($value)) {
             return $value;
         }
 
@@ -164,13 +185,17 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
 
         if (!in_array($key, static::$proxies)) {
             if (static::$raiseExceptionOnNull) {
-                throw new Exception("Property [{$key}] does not exist on this collection instance.");
+                throw new Exception(
+                    "Property [{$key}] does not exist on this collection instance."
+                );
             }
 
             return null;
         }
 
-        return $this->runViaLaravelCollection(function ($collection) use ($key) {
+        return $this->runViaLaravelCollection(function ($collection) use (
+            $key
+        ) {
             return new HigherOrderCollectionProxy($collection, $key);
         });
     }
@@ -185,7 +210,7 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
     {
         $value = is_null($value) ? $this->items : $value;
 
-        if (! $this->isArrayable($value)) {
+        if (!$this->isArrayable($value)) {
             return $value;
         }
 
@@ -209,7 +234,10 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      */
     public function get($key, $default = null)
     {
-        if (($value = $this->call('get', [$key, static::NOT_FOUND])) === static::NOT_FOUND) {
+        if (
+            ($value = $this->call('get', [$key, static::NOT_FOUND])) ===
+            static::NOT_FOUND
+        ) {
             $value = Arr::get($this->items, $key, $default);
 
             if (is_array($value)) {
@@ -270,8 +298,11 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
         ];
 
         $data = $this->filter(function ($value, $key) use ($cases) {
-            return array_search($key, $cases) !== false || array_search(lower($key), $cases) !== false;
-        })->keys()->first();
+            return array_search($key, $cases) !== false ||
+                array_search(lower($key), $cases) !== false;
+        })
+            ->keys()
+            ->first();
 
         return is_string($data) ? $data : static::NOT_FOUND;
     }
@@ -308,9 +339,7 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      */
     public function kebabCase($string)
     {
-        return kebab_case(
-            $this->camelCase($string)
-        );
+        return kebab_case($this->camelCase($string));
     }
 
     /**
@@ -356,7 +385,7 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
 
         $result = $closure($collection);
 
-        if (! $this->methodMustReturnArray($method)) {
+        if (!$this->methodMustReturnArray($method)) {
             $result = $this->coollectizeItems($result);
         }
 
@@ -394,14 +423,12 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      */
     protected function isArrayable($items)
     {
-        return
-            is_array($items) ||
+        return is_array($items) ||
             $items instanceof self ||
             $items instanceof Arrayable ||
             $items instanceof Jsonable ||
             $items instanceof JsonSerializable ||
-            $items instanceof Traversable
-            ;
+            $items instanceof Traversable;
     }
 
     /**
@@ -440,7 +467,7 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      */
     public function offsetGet($key)
     {
-        if (! isset($this->items[$key])) {
+        if (!isset($this->items[$key])) {
             return null;
         }
 
@@ -483,10 +510,10 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
     {
         foreach ($items as $key => $item) {
             if ($item instanceof Closure) {
-                $items[$key] = $method === 'reduce'
-                    ? $this->coollectizeCallbackForReduce($item)
-                    : $this->coollectizeCallback($item)
-                ;
+                $items[$key] =
+                    $method === 'reduce'
+                        ? $this->coollectizeCallbackForReduce($item)
+                        : $this->coollectizeCallback($item);
             }
         }
 
@@ -500,9 +527,7 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
     public function coollectizeCallback(callable $originalCallback = null)
     {
         return function ($value = null, $key = null) use ($originalCallback) {
-            return $originalCallback(
-                $this->__wrap($value), $key
-            );
+            return $originalCallback($this->__wrap($value), $key);
         };
     }
 
@@ -513,10 +538,7 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
     public function coollectizeCallbackForReduce(callable $originalCallback)
     {
         return function ($carry, $item) use ($originalCallback) {
-            return $originalCallback(
-                $carry,
-                $this->__wrap($item)
-            );
+            return $originalCallback($carry, $this->__wrap($item));
         };
     }
 
@@ -528,7 +550,10 @@ class Coollection implements ArrayAccess, Arrayable, Countable, IteratorAggregat
      */
     public function overwrite($overwrite)
     {
-        $this->items = array_replace_recursive($this->items, $this->getArrayableItems($overwrite));
+        $this->items = array_replace_recursive(
+            $this->items,
+            $this->getArrayableItems($overwrite)
+        );
 
         return $this;
     }
