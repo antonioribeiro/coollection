@@ -11,7 +11,7 @@
     <a href="https://scrutinizer-ci.com/g/antonioribeiro/coollection/?branch=master"><img alt="Coverage" src="https://img.shields.io/scrutinizer/coverage/g/antonioribeiro/coollection.svg?style=flat-square"></a>
     <a href="https://styleci.io/repos/108602178"><img alt="StyleCI" src="https://styleci.io/repos/108602178/shield"></a>
     <!-- <a href="https://insight.sensiolabs.com/projects/156fbef1-b03f-4fca-ba97-57874b7a35bf"><img alt="SensioLabsInsight" src="https://img.shields.io/sensiolabs/i/156fbef1-b03f-4fca-ba97-57874b7a35bf.svg?style=flat-square"></a> -->
-    <a href="https://travis-ci.org/antonioribeiro/coollection"><img alt="PHP" src="https://img.shields.io/badge/PHP-7.0%20--%207.2-brightgreen.svg?style=flat-square"></a>
+    <a href="https://travis-ci.org/antonioribeiro/coollection"><img alt="PHP" src="https://img.shields.io/badge/PHP-7.0%20--%207.3-brightgreen.svg?style=flat-square"></a>
 </p>
 
 #### Access collection items as objects properties
