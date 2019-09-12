@@ -120,16 +120,16 @@
         },
         {
             "name": "pragmarx/ia-arr",
-            "version": "v5.8.7",
+            "version": "v6.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/antonioribeiro/ia-arr.git",
-                "reference": "693bba7d7566bbf68f92c71a74498546f25ea93f"
+                "reference": "a0c1d40812929fb94a21c12cfc023acbab530141"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/antonioribeiro/ia-arr/zipball/693bba7d7566bbf68f92c71a74498546f25ea93f",
-                "reference": "693bba7d7566bbf68f92c71a74498546f25ea93f",
+                "url": "https://api.github.com/repos/antonioribeiro/ia-arr/zipball/a0c1d40812929fb94a21c12cfc023acbab530141",
+                "reference": "a0c1d40812929fb94a21c12cfc023acbab530141",
                 "shasum": ""
             },
             "require": {
@@ -168,9 +168,9 @@
             "authors": [
                 {
                     "name": "Antonio Carlos Ribeiro",
-                    "role": "Creator",
                     "email": "acr@antoniocarlosribeiro.com",
-                    "homepage": "https://antoniocarlosribeiro.com"
+                    "homepage": "https://antoniocarlosribeiro.com",
+                    "role": "Creator"
                 }
             ],
             "description": "Laravel Illuminate Agnostic Arr",
@@ -182,20 +182,20 @@
                 "laravel",
                 "pragmarx"
             ],
-            "time": "2019-03-22T15:54:00+00:00"
+            "time": "2019-09-12T03:09:58+00:00"
         },
         {
             "name": "pragmarx/ia-collection",
-            "version": "v5.8.7",
+            "version": "v6.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/antonioribeiro/ia-collection.git",
-                "reference": "a71846eb0dddd143667e05938e9fa61f94b8cfd9"
+                "reference": "76203a7b5e1780b4b2b0e69f0b8062c573540fa6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/antonioribeiro/ia-collection/zipball/a71846eb0dddd143667e05938e9fa61f94b8cfd9",
-                "reference": "a71846eb0dddd143667e05938e9fa61f94b8cfd9",
+                "url": "https://api.github.com/repos/antonioribeiro/ia-collection/zipball/76203a7b5e1780b4b2b0e69f0b8062c573540fa6",
+                "reference": "76203a7b5e1780b4b2b0e69f0b8062c573540fa6",
                 "shasum": ""
             },
             "require": {
@@ -233,9 +233,9 @@
             "authors": [
                 {
                     "name": "Antonio Carlos Ribeiro",
-                    "role": "Creator",
                     "email": "acr@antoniocarlosribeiro.com",
-                    "homepage": "https://antoniocarlosribeiro.com"
+                    "homepage": "https://antoniocarlosribeiro.com",
+                    "role": "Creator"
                 }
             ],
             "description": "Laravel Illuminate Agnostic Collection",
@@ -246,20 +246,20 @@
                 "laravel",
                 "pragmarx"
             ],
-            "time": "2019-03-22T15:55:17+00:00"
+            "time": "2019-09-12T03:35:33+00:00"
         },
         {
             "name": "pragmarx/ia-str",
-            "version": "v5.8.7",
+            "version": "v6.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/antonioribeiro/ia-str.git",
-                "reference": "2b3304ecc01df2df4df6da534d78a26c2679064f"
+                "reference": "adee679aad950aecdc20dc43311c2b6252b26fbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/antonioribeiro/ia-str/zipball/2b3304ecc01df2df4df6da534d78a26c2679064f",
-                "reference": "2b3304ecc01df2df4df6da534d78a26c2679064f",
+                "url": "https://api.github.com/repos/antonioribeiro/ia-str/zipball/adee679aad950aecdc20dc43311c2b6252b26fbd",
+                "reference": "adee679aad950aecdc20dc43311c2b6252b26fbd",
                 "shasum": ""
             },
             "require": {
@@ -304,9 +304,9 @@
             "authors": [
                 {
                     "name": "Antonio Carlos Ribeiro",
-                    "role": "Creator",
                     "email": "acr@antoniocarlosribeiro.com",
-                    "homepage": "https://antoniocarlosribeiro.com"
+                    "homepage": "https://antoniocarlosribeiro.com",
+                    "role": "Creator"
                 }
             ],
             "description": "Laravel Illuminate Agnostic Str",
@@ -318,7 +318,7 @@
                 "str",
                 "string"
             ],
-            "time": "2019-03-22T15:52:51+00:00"
+            "time": "2019-09-12T03:20:24+00:00"
         },
         {
             "name": "ramsey/uuid",

@@ -288,18 +288,18 @@ class Coollection implements
         $cases = [
             $key,
             $this->snakeCase($key),
-            lower($this->snakeCase($key)),
+            Str::lower($this->snakeCase($key)),
             $this->camelCase($key),
             $this->kebabCase($key),
-            lower($this->kebabCase($key)),
+            Str::lower($this->kebabCase($key)),
             $this->stringCase($key),
-            lower($this->stringCase($key)),
-            lower($key),
+            Str::lower($this->stringCase($key)),
+            Str::lower($key),
         ];
 
         $data = $this->filter(function ($value, $key) use ($cases) {
             return array_search($key, $cases) !== false ||
-                array_search(lower($key), $cases) !== false;
+                array_search(Str::lower($key), $cases) !== false;
         })
             ->keys()
             ->first();
@@ -339,7 +339,7 @@ class Coollection implements
      */
     public function kebabCase($string)
     {
-        return kebab_case($this->camelCase($string));
+        return Str::kebab($this->camelCase($string));
     }
 
     /**
@@ -350,7 +350,7 @@ class Coollection implements
      */
     public function camelCase($string)
     {
-        return camel_case($string);
+        return Str::camel($string);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace PragmaRX\Coollection\Tests;
 use ReflectionClass;
 use JsonSerializable;
 use BadMethodCallException;
+use IlluminateAgnostic\Str\Support\Str;
 use PragmaRX\Coollection\Package\Coollection;
 use PragmaRX\Coollection\Tests\Support\Dummy;
 use IlluminateAgnostic\Collection\Contracts\Support\Jsonable;
@@ -1480,21 +1481,21 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals('laravel_framework', with('laravel_framework'));
 
-        $this->assertEquals('laravel_framework', snake('LaravelFramework'));
+        $this->assertEquals('laravel_framework', Str::snake('LaravelFramework'));
 
         $this->assertEquals(
             'LARAVEL FRAMEWORK É A MELHOR',
-            upper('laravel framework é a melhor')
+            Str::upper('laravel framework é a melhor')
         );
 
         $this->assertEquals(
             'laravel framework é a melhor',
-            lower('LARAVEL FRAMEWORK É A MELHOR')
+            Str::lower('LARAVEL FRAMEWORK É A MELHOR')
         );
 
-        $this->assertEquals(true, starts_with('laravel framework', 'l'));
+        $this->assertEquals(true, Str::startsWith('laravel framework', 'l'));
 
-        $this->assertEquals(false, starts_with('Laravel framework', 'l'));
+        $this->assertEquals(false, Str::startsWith('Laravel framework', 'l'));
 
         $c = new Coollection(($array = ['laravel framework']));
 
@@ -1518,7 +1519,7 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
             coollect()->testMacro('is it?')
         );
 
-        Coollection::macro('testMacroLower', 'lower');
+        Coollection::macro('testMacroLower', Str::class.'::lower');
 
         $this->assertEquals(
             'macro is lower',
@@ -1761,7 +1762,7 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
             'b' => 2,
             'c' => 3,
             'f' => function ($value) {
-                return strtoupper($value);
+                return Str::upper($value);
             },
         ];
 
@@ -1777,7 +1778,7 @@ class CoollectionTest extends \PHPUnit\Framework\TestCase
             'b' => 2,
             'a' => 1,
             'f' => function ($value) {
-                return strtoupper($value);
+                return Str::upper($value);
             },
         ]);
 
@@ -1829,7 +1830,7 @@ class TestSupportCollectionHigherOrderItem
 
     public function uppercase()
     {
-        $this->name = strtoupper($this->name);
+        $this->name = Str::upper($this->name);
     }
 }
 
