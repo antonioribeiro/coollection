@@ -3,24 +3,24 @@
 use IlluminateAgnostic\Str\Support\Str;
 use PragmaRX\Coollection\Package\Coollection;
 
-if (!class_exists(Illuminate\Support\Collection::class)) {
-    if (!function_exists('coollect')) {
-        /**
-         * Create a collection from the given value.
-         *
-         * @param  mixed  $value
-         * @return \PragmaRX\Coollection\Package\Coollection
-         */
-        function coollect($value = null)
-        {
-            if ($value instanceof Coollection) {
-                return $value;
-            }
-
-            return new Coollection($value);
+if (!function_exists('coollect')) {
+    /**
+     * Create a collection from the given value.
+     *
+     * @param  mixed  $value
+     * @return \PragmaRX\Coollection\Package\Coollection
+     */
+    function coollect($value = null)
+    {
+        if ($value instanceof Coollection) {
+            return $value;
         }
-    }
 
+        return new Coollection($value);
+    }
+}
+
+if (!class_exists(Illuminate\Support\Collection::class)) {
     /**
      * @codeCoverageIgnore
      */
