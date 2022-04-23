@@ -17,11 +17,25 @@
             "role": "Creator"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/asbiin/ia-collection"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/asbiin/ia-arr"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/asbiin/ia-str"
+        }
+    ],
     "require": {
         "php": ">=7.0",
-        "pragmarx/ia-collection": "~5.0|~6.0|~7.0",
-        "pragmarx/ia-str": "~5.0|~6.0|~7.0",
-        "pragmarx/ia-arr": "~5.0|~6.0|~7.0"
+        "pragmarx/ia-collection": "dev-update-var-dumper",
+        "pragmarx/ia-str": "dev-update-portable-ascii",
+        "pragmarx/ia-arr": "dev-update-var-dumper"
     },
     "require-dev": {
         "mockery/mockery": "~1.0",
