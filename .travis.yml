@@ -1,10 +1,9 @@
 language: php
 
 php:
-  - 7.1
-  - 7.2
-  - 7.3
-  - 7.4snapshot
+  - 7.4
+  - 8.0
+  - 8.1
 # - nightly
 
 # This triggers builds to run on the new TravisCI infrastructure.
@@ -25,7 +24,7 @@ script:
 
 after_script:
   - |
-    if [[ "$TRAVIS_PHP_VERSION" == '7.2' ]]; then
+    if [[ "$TRAVIS_PHP_VERSION" == '8.0' ]]; then
       wget https://scrutinizer-ci.com/ocular.phar
       php ocular.phar code-coverage:upload --format=php-clover coverage.clover
     fi
