@@ -120,7 +120,8 @@ class Coollection implements
      */
     public function call($name, $arguments = [])
     {
-        return $this->runViaLaravelCollection(function ($collection) use (
+        return $this->runViaLaravelCollection(
+            function ($collection) use (
             $name,
             $arguments
         ) {
@@ -129,7 +130,8 @@ class Coollection implements
                 $this->coollectizeCallbacks($this->__toArray($arguments), $name)
             );
         },
-        $name);
+            $name
+        );
     }
 
     /**
