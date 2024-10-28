@@ -5,17 +5,18 @@ namespace PragmaRX\Coollection\Package;
 use Closure;
 use Countable;
 use Exception;
+use Traversable;
 use ArrayAccess;
 use JsonSerializable;
 use IteratorAggregate;
+use Illuminate\Support\Collection;
 use IlluminateAgnostic\Str\Support\Str;
 use IlluminateAgnostic\Arr\Support\Arr;
-use IlluminateAgnostic\Collection\Support\Collection;
-use IlluminateAgnostic\Collection\Support\Traits\Macroable;
-use IlluminateAgnostic\Collection\Contracts\Support\Jsonable;
-use IlluminateAgnostic\Collection\Contracts\Support\Arrayable;
-use IlluminateAgnostic\Collection\Support\HigherOrderCollectionProxy;
-use IlluminateAgnostic\Collection\Support\Collection as TightencoCollect;
+use Illuminate\Support\Traits\Macroable;
+use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\HigherOrderCollectionProxy;
+use Illuminate\Support\Collection as TightencoCollect;
 
 class Coollection implements
     ArrayAccess,
@@ -456,7 +457,7 @@ class Coollection implements
      * @param  mixed  $key
      * @return bool
      */
-    public function offsetExists($key)
+    public function offsetExists(mixed $key): bool
     {
         return array_key_exists($key, $this->items);
     }
@@ -467,7 +468,7 @@ class Coollection implements
      * @param  mixed  $key
      * @return mixed
      */
-    public function offsetGet($key)
+    public function offsetGet(mixed $key): mixed
     {
         if (!isset($this->items[$key])) {
             return null;
@@ -483,7 +484,7 @@ class Coollection implements
      * @param  mixed  $value
      * @return void
      */
-    public function offsetSet($key, $value)
+    public function offsetSet(mixed $key, mixed $value): void
     {
         if (is_null($key)) {
             $this->items[] = $value;
@@ -498,7 +499,7 @@ class Coollection implements
      * @param  string  $key
      * @return void
      */
-    public function offsetUnset($key)
+    public function offsetUnset(mixed $key): void
     {
         unset($this->items[$key]);
     }
@@ -578,7 +579,7 @@ class Coollection implements
      * which is a value of any type other than a resource.
      * @since 5.4.0
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->call('jsonSerialize');
     }
@@ -592,7 +593,7 @@ class Coollection implements
      * The return value is cast to an integer.
      * @since 5.1.0
      */
-    public function count()
+    public function count(): int
     {
         return $this->call('count');
     }
@@ -604,7 +605,7 @@ class Coollection implements
      * <b>Traversable</b>
      * @since 5.0.0
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return $this->call('getIterator');
     }

@@ -20,6 +20,37 @@ if (!function_exists('coollect')) {
     }
 }
 
+if (!function_exists('array_sort_by_keys_recursive')) {
+    /**
+     * Determine if a given string starts with a given substring.
+     *
+     * @param array $array
+     */
+    function array_sort_by_keys_recursive(array &$array)
+    {
+        ksort($array, SORT_NATURAL);
+
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                array_sort_by_keys_recursive($array[$key]);
+            }
+        }
+    }
+}
+
+if (! function_exists('with')) {
+    /**
+     * Return the given object. Useful for chaining.
+     *
+     * @param  mixed  $object
+     * @return mixed
+     */
+    function with($object)
+    {
+        return $object;
+    }
+}
+
 if (!class_exists(Illuminate\Support\Collection::class)) {
     /**
      * @codeCoverageIgnore
@@ -42,37 +73,6 @@ if (!class_exists(Illuminate\Support\Collection::class)) {
             dump(...$args);
 
             die();
-        }
-    }
-
-    if (!function_exists('array_sort_by_keys_recursive')) {
-        /**
-         * Determine if a given string starts with a given substring.
-         *
-         * @param array $array
-         */
-        function array_sort_by_keys_recursive(array &$array)
-        {
-            ksort($array, SORT_NATURAL);
-
-            foreach ($array as $key => $value) {
-                if (is_array($value)) {
-                    array_sort_by_keys_recursive($array[$key]);
-                }
-            }
-        }
-    }
-
-    if (! function_exists('with')) {
-        /**
-         * Return the given object. Useful for chaining.
-         *
-         * @param  mixed  $object
-         * @return mixed
-         */
-        function with($object)
-        {
-            return $object;
         }
     }
 }

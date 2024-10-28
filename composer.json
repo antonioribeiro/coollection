@@ -19,7 +19,7 @@
     ],
     "require": {
         "php": ">=7.0",
-        "pragmarx/ia-collection": "~5.0|~6.0|~7.0",
+        "illuminate/collections": "^10.48|^11.29",
         "pragmarx/ia-str": "~5.0|~6.0|~7.0",
         "pragmarx/ia-arr": "~5.0|~6.0|~7.0"
     },
