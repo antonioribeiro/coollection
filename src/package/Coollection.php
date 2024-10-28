@@ -123,14 +123,14 @@ class Coollection implements
     {
         return $this->runViaLaravelCollection(
             function ($collection) use (
-            $name,
-            $arguments
-        ) {
-            return call_user_func_array(
-                [$collection, $name],
-                $this->coollectizeCallbacks($this->__toArray($arguments), $name)
-            );
-        },
+                $name,
+                $arguments
+            ) {
+                return call_user_func_array(
+                    [$collection, $name],
+                    $this->coollectizeCallbacks($this->__toArray($arguments), $name)
+                );
+            },
             $name
         );
     }
